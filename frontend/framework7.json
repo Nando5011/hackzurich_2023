@@ -1,0 +1,26 @@
+{
+  "cwd": "/Users/jeremiah.agboola/Documents/GitHub/hackzurich_2023/frontend",
+  "type": [
+    "capacitor",
+    "pwa"
+  ],
+  "name": "ProLog",
+  "framework": "react",
+  "template": "blank",
+  "bundler": "vite",
+  "cssPreProcessor": "less",
+  "theming": {
+    "customColor": true,
+    "color": "#ffda00",
+    "darkMode": true,
+    "iconFonts": true
+  },
+  "customBuild": false,
+  "pkg": "io.framework7.myapp",
+  "capacitor": {
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}
