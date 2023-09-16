@@ -36,6 +36,9 @@ The input cata consists of a list ok KeyEvents.
 -   **CPM** (Characters per Minute)<br>
     The average number of characters typed per minute. This is calculated by dividing the number of characters typed by the time in minutes.
 
+-  **TSV** (Typing Speed Variability)<br>
+    The standard deviation of the typing speed. This is calculated by taking the standard deviation of the typing speed of each minute.
+
 ### **Typing Accuracy**
 
 -   **CER** (Character Error Rate)<br>
@@ -44,3 +47,7 @@ The input cata consists of a list ok KeyEvents.
 -  **ABU** (Absolute Backspace Usage)<br>
     The number of backspaces used per minute. This is calculated by dividing the number of backspaces used by the time in minutes.
 
+### **Text Chunking** 
+
+-   **Chunking**<br>
+    The number of chunks typed per minute. This is calculated by dividing the number of chunks typed by the time in minutes.
