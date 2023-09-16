@@ -50,6 +50,8 @@ class Analyzer:
         """
         shortTimeHistory = self.keylogger.getShortTimeHistory()
         backspaceCount = self.getABU()
+        if len(shortTimeHistory) == 0:
+            return 0
         rbu = backspaceCount / len(shortTimeHistory)
         return rbu
         
@@ -60,4 +62,6 @@ while True:
     print("CPM: " + str(analyzer.getCPM()))
     print("WPM: " + str(analyzer.getWPM()))
     print("Speed Variation: " + str(analyzer.getSpeedVariation()))
+    print("ABU: " + str(analyzer.getABU()))
+    print("RBU: " + str(analyzer.getRBU()))
     time.sleep(5)
