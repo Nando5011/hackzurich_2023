@@ -1,17 +1,14 @@
 from pynput import keyboard
 import datetime
 from datetime import timedelta
-import threading
 
 # Sets up a keyboard listener and logs the keyboard inputs.
 # A history of the last key presses can be accesses via getShortTimeHistory()
 # How long this history is is set via the maxShortTimeHistoryTimeSpan parameter
 class KeyLogger:
-    def __init__(self, maxShortTimeHistoryTimeSpanSeconds: int, latestActivityTimeSpanSeconds: int):
+    def __init__(self, maxShortTimeHistoryTimeSpanSeconds: int):
         self.shortTimeHistory = []
         self.latestActivity = []
-        self.LATESTACTIVITYTIMESPAN = datetime.timedelta(seconds=latestActivityTimeSpanSeconds)
-        self.__clearLatestActivity()
         listener = keyboard.Listener(on_press=self.__onKeyPress)
         listener.start()
         self.MAX_SHORTIMEHISTORYTIMESPAN = datetime.timedelta(seconds=maxShortTimeHistoryTimeSpanSeconds)
@@ -23,11 +20,6 @@ class KeyLogger:
 
     def __getTimeStampFromHistoryEntry(self, entry):
         return entry[1]
-
-    def __clearLatestActivity(self):
-        print("clearactivity")
-        threading.Timer(self.LATESTACTIVITYTIMESPAN.seconds, self.__clearLatestActivity).start()
-        self.latestActivity = []
 
     # Callback function that has to be called on keypress
     def __onKeyPress(self, key):
@@ -58,6 +50,8 @@ class KeyLogger:
     def getShortTimeHistory(self):
         return self.shortTimeHistory
 
-    # Get latest activity. Shows every keystroke in the configured time span
+    # Get latest activity and then clear it. Shows every keystroke since last call
     def getLatestActivity(self):
-        return self.latestActivity
+        ret = self.latestActivity
+        self.latestActivity = []
+        return ret

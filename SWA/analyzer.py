@@ -18,7 +18,7 @@ RBU_THRESHOLD = 0.1
 # choose a refresh time of atleast 5 seconds.
 class Analyzer:
     def __init__(self, refreshTime: int):
-        self.keylogger = KeyLogger(refreshTime, refreshTime)
+        self.keylogger = KeyLogger(refreshTime)
         self.REFRESH_TIME = refreshTime
         self.latestActivity = []
         self.__run()
@@ -34,7 +34,10 @@ class Analyzer:
             self.__checkForThresholds()
             endTime = time.time()
             runTime = endTime - startTime
-            time.sleep(ANALYZEREFRESHTIME - runTime)
+            # If runTime is bigger than refresh time, dont wait
+            # this could lead to missed inputs
+            if(self.REFRESH_TIME > runTime):
+                time.sleep(self.REFRESH_TIME - runTime)
 
     # These functions will get executed independently on their events
     # TODO implement these based on the statistics, these can be blocking as they are executed independently
