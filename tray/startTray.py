@@ -1,23 +1,16 @@
 import pystray
-from PIL import Image, ImageDraw
+from PIL import Image
 import os
 
-def create_image(width, height, color1, color2):
-    # Generate an image and draw a pattern
-    image = Image.new('RGB', (width, height), color1)
-    dc = ImageDraw.Draw(image)
-    dc.rectangle(
-        (width // 2, 0, width, height // 2),
-        fill=color2)
-    dc.rectangle(
-        (0, height // 2, width // 2, height),
-        fill=color2)
+# Function to be called when the system tray icon is clicked
+def on_activate(icon, item):
+    # Add your code here to perform an action when the icon is clicked
+    pass
 
-    return image
+# Create a system tray icon
+image = Image.open(os.path.join(os.getcwd(), 'tray', 'logitech.png'))  # Replace with the path to your icon image
+menu = (pystray.MenuItem('Open', on_activate), pystray.MenuItem('Exit', lambda: icon.stop()))
+icon = pystray.Icon("MyApp", image, menu=menu)
 
-
-# In order for the icon to be displayed, you must provide an icon
-icon = pystray.Icon('test name', icon=os.path.join(os.getcwd(), 'tray', 'logitech.png'))
-
-# To finally show you icon, call run
+# Run the system tray application
 icon.run()
