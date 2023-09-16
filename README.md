@@ -70,7 +70,7 @@ To get a local copy up and running follow these simple example steps.
 
 3. Install requirements
   ```sh
-  pip install -r requirements.txt
+  pip install -r SWA/requirements.txt
   ```
 
 4. Run the app
