@@ -1,4 +1,12 @@
-import { Icon, List, ListInput, Page, View } from "framework7-react";
+import {
+  Block,
+  BlockTitle,
+  Icon,
+  List,
+  ListInput,
+  Page,
+  View,
+} from "framework7-react";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   useCollection,
@@ -29,11 +37,12 @@ const StatisticView = ({ currentUser }) => {
 
   useEffect(() => {
     const matrix = {};
+    setStatMatrix({});
     const unsubscribe = onSnapshot(
       collection(firestore, devicesRef + "/" + selectedDevice + "/records"),
       (querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          getDocs(
+          onSnapshot(
             collection(
               firestore,
               devicesRef +
@@ -42,34 +51,33 @@ const StatisticView = ({ currentUser }) => {
                 "/records/" +
                 doc.id +
                 "/timestamps"
-            )
-          ).then((val) => {
-            const dateSplit = doc.id.split("-");
-            val.docs.map((doc3) => {
-              if (!matrix[dateSplit[0]]) {
-                matrix[dateSplit[0] + ""] = [];
-              }
-              if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
-              }
-              if (
-                !matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]
-              ) {
+            ),
+            (querySnapshot) => {
+              const dateSplit = doc.id.split("-");
+              querySnapshot.docs.map((doc3) => {
+                if (!matrix[dateSplit[0]]) {
+                  matrix[dateSplit[0] + ""] = [];
+                }
+                if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
+                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
+                }
+                if (
+                  !matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]
+                ) {
+                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
+                    dateSplit[2] + ""
+                  ] = [];
+                }
+
+                // Push doc3.data() into the array
                 matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
                   dateSplit[2] + ""
-                ] = [];
-              }
-
-              // Push doc3.data() into the array
-              matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                dateSplit[2] + ""
-              ].push({ ...doc3.data(), timestamp: doc3.id });
-            });
-            setTimeout(() => {
-              setStatMatrix(matrix as StatRecord);
+                ].push({ ...doc3.data(), timestamp: doc3.id });
+              });
               store.dispatch("setStatsMatrix", matrix);
-            }, 1000);
-          });
+              setStatMatrix(matrix as StatRecord);
+            }
+          );
         });
       }
     );
@@ -78,7 +86,8 @@ const StatisticView = ({ currentUser }) => {
     };
   }, [selectedDevice]);
   return (
-    <>
+    <Block>
+      <BlockTitle>My Timeline</BlockTitle>
       <List>
         <ListInput
           label="Device"
@@ -112,7 +121,7 @@ const StatisticView = ({ currentUser }) => {
           />
         ))}
       </div>
-    </>
+    </Block>
   );
 };
 

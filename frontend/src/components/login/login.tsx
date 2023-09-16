@@ -28,11 +28,19 @@ const Login = ({ closeLoginScreen }) => {
         f7.loginScreen.close();
       })
       .catch((error) => {
-        createUserWithEmailAndPassword(auth, email, password).then((user) => {
-          f7.dialog.alert("Login created for new user", () =>
-            f7.loginScreen.close()
-          );
-        });
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((user) => {
+            f7.dialog.alert("Login created for new user", () =>
+              f7.loginScreen.close()
+            );
+          })
+          .catch((error) => {
+            if (error.message.includes("email-already-in-use")) {
+              f7.dialog.alert("Wrong Password");
+            } else {
+              f7.dialog.alert("Password length minimum 6");
+            }
+          });
       });
   };
 

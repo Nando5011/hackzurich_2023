@@ -1,13 +1,7 @@
 import React from "react";
-import { Navbar, NavTitle, Link, NavRight, NavLeft } from "framework7-react";
-import { auth } from "../../js/firebase";
-import { signOut } from "firebase/auth";
+import { Navbar, NavTitle, Link, NavRight } from "framework7-react";
 
-const NavbarComponent = () => {
-  const signOutUser = () => {
-    signOut(auth);
-  };
-
+const NavbarComponent = ({ signOutUser }) => {
   return (
     <Navbar>
       <NavTitle>ProLog</NavTitle>
