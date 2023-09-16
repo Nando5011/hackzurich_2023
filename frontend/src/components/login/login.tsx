@@ -74,14 +74,18 @@ const Login = ({ closeLoginScreen }) => {
             onInputEmpty={() => setIsInvalidPassword(true)}
           />
         </List>
-        <List inset>
-          <Button disabled={isValidEmail || isValidPassword} onClick={signIn}>
-            Sign In
-          </Button>
-          <BlockFooter>
-            Provide email and password to sign in or sign up
-          </BlockFooter>
-        </List>
+        <Button
+          fill
+          large
+          disabled={isValidEmail || isValidPassword}
+          onClick={signIn}
+          style={{ width: "fit-content", margin: "auto" }}
+        >
+          Sign In
+        </Button>
+        <BlockFooter>
+          Provide email and password to sign in or sign up
+        </BlockFooter>
       </Page>
     </LoginScreen>
   );

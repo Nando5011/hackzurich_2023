@@ -11,7 +11,7 @@ const MyApp = () => {
   // Framework7 Parameters
   const f7params = {
     name: "ProLog", // App name
-    theme: "auto", // Automatic theme detection
+    theme: "md",
     colors: {
       primary: "#ffda00",
     },

@@ -30,11 +30,15 @@ const HomePage = () => {
 
   return (
     <Page name="home">
-      <Toolbar position="bottom">
-        <p style={{ display: "flex", width: "100%", justifyContent: "center" }}>
-          {currentUser?.email}
-        </p>
-      </Toolbar>
+      {currentUser && (
+        <Toolbar position="bottom">
+          <p
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
+            {currentUser.email}
+          </p>
+        </Toolbar>
+      )}
       {currentUser && (
         <>
           <NavbarComponent signOutUser={signOutUser} />
