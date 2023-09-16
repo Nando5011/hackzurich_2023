@@ -30,21 +30,21 @@ const HomePage = () => {
 
   return (
     <Page name="home">
+      <NavbarComponent signOutUser={signOutUser} />
       {currentUser && (
         <Toolbar position="bottom">
           <p
-            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+            }}
           >
             {currentUser.email}
           </p>
         </Toolbar>
       )}
-      {currentUser && (
-        <>
-          <NavbarComponent signOutUser={signOutUser} />
-          <StatisticView currentUser={currentUser} />
-        </>
-      )}
+      {currentUser && <StatisticView currentUser={currentUser} />}
 
       {loginScreenOpened && (
         <Login closeLoginScreen={() => setLoginScreenOpened(false)} />

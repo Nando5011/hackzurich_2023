@@ -3,7 +3,7 @@ import { Navbar, NavTitle, Link, NavRight, NavLeft } from "framework7-react";
 
 const NavbarComponent = ({ signOutUser }) => {
   return (
-    <Navbar>
+    <Navbar sliding>
       <NavLeft>
         <Link onClick={signOutUser}>Sign Out</Link>
       </NavLeft>
