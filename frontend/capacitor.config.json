@@ -1,6 +1,6 @@
 {
   "appId": "io.framework7.myapp",
-  "appName": "ProLog",
+  "appName": "BreakWise",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

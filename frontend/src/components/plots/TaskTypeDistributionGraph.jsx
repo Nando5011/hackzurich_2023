@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  PieChart,
-  Pie,
-  Tooltip,
-  Legend,
-  Cell,
-} from "recharts";
+import { PieChart, Pie, Tooltip, Legend, Cell } from "recharts";
 import { Block } from "framework7-react";
 import store from "../../js/store";
 
@@ -53,8 +47,8 @@ const TaskTypeDistributionGraph = () => {
   return (
     <Block>
       <PieChart
-        width={windowSize.width * 0.80}
-        height={windowSize.height * 0.75}
+        width={windowSize.width * 0.8}
+        height={windowSize.height * 0.55}
         style={{ margin: "auto" }}
       >
         <Pie

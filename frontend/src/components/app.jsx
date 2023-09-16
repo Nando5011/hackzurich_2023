@@ -10,12 +10,12 @@ const MyApp = () => {
   const device = getDevice();
   // Framework7 Parameters
   const f7params = {
-    name: "ProLog", // App name
+    name: "BreakWise", // App name
     theme: "md",
     colors: {
-      primary: "#ffda00",
+      primary: "#35796f",
     },
-    darkMode: true,
+    darkMode: false,
 
     // App store
     store: store,

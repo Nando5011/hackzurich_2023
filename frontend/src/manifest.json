@@ -1,7 +1,7 @@
 {
-  "name": "ProLog",
-  "short_name": "ProLog",
-  "description": "ProLog",
+  "name": "BreakWise",
+  "short_name": "BreakWise",
+  "description": "BreakWise",
   "lang": "en-US",
   "start_url": "/",
   "display": "standalone",

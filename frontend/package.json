@@ -1,8 +1,8 @@
 {
-  "name": "prolog",
+  "name": "breakwise",
   "private": true,
   "version": "1.0.0",
-  "description": "ProLog",
+  "description": "BreakWise",
   "repository": "",
   "license": "UNLICENSED",
   "scripts": {
