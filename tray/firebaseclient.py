@@ -2,6 +2,8 @@ import os
 import firebase_admin
 import firebase_admin
 from firebase_admin import firestore, db, credentials
+from datetime import datetime
+from datetime import date
 
 
 
@@ -36,5 +38,17 @@ class FirebaseClient:
             print(f'Email: {doc.to_dict()["email"]}')
             print()
 
-    def send_data_to_firestore(self, data)-> None:
-        print(data)
+    def send_windowlogger_data_to_firestore(self, key, time_spent)-> None:
+        print("FBC --> "+key +" " + time_spent)
+        
+        application = key.split(os.path.sep)
+        data = {
+            "task": key,
+            "taskType": "productive",
+        }
+
+        document_path = "users/test1234@gmail.com/devices/deviceID1/records/"+date.today().strftime('%Y-%m-%d')+"/timestamps/"+ datetime.now().strftime('%H:%M')
+        self.db.document(document_path).set(data, merge=True)
+        
+        
+        print("Sent {} to Firebase --> {}".format(data, document_path))
