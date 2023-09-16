@@ -1,19 +1,20 @@
-import React from 'react';
-import TimeSeriesGraph from '../components/plots/TimeSeriesGraph';
-import TaskTypeDistributionGraph from '../components/plots/TaskTypeDistributionGraph';
-//import { statMatrix } from '../components/statistic-view/statistic-view';
+import React from "react";
+import TimeSeriesGraph from "../components/plots/TimeSeriesGraph";
+import TaskTypeDistributionGraph from "../components/plots/TaskTypeDistributionGraph";
+import { Link, NavRight, NavTitle, Navbar } from "framework7-react";
 
-const StatsPage = ({ statMatrix }) => {
+const StatsPage = () => {
   return (
     <div className="page">
-      <div className="navbar">
-        <div className="navbar-inner">
-          <div className="title">Stats</div>
-        </div>
-      </div>
+      <Navbar>
+        <NavTitle>Stats</NavTitle>
+        <NavRight>
+          <Link back>Go Back</Link>
+        </NavRight>
+      </Navbar>
       <div className="page-content">
-        <TaskTypeDistributionGraph statMatrix={statMatrix} />
-        <TimeSeriesGraph statMatrix={statMatrix} />
+        <TaskTypeDistributionGraph />
+        <TimeSeriesGraph />
       </div>
     </div>
   );

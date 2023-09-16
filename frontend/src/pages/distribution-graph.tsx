@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  Page,
-  Block,
-} from "framework7-react";
+import { Page, Block } from "framework7-react";
 
-import { 
-  User
-} from "firebase/auth";
+import { User } from "firebase/auth";
 import { auth } from "../js/firebase";
-import StatisticView from "../components/statistic-view/statistic-view";
 import Login from "../components/login/login";
 import NavbarComponent from "../components/navbar/navbar";
+import TimeSeriesGraph from "../components/plots/TimeSeriesGraph";
+import TaskTypeDistributionGraph from "../components/plots/TaskTypeDistributionGraph";
 
 const HomePage = () => {
   const [loginScreenOpened, setLoginScreenOpened] = useState(false);
@@ -24,18 +20,14 @@ const HomePage = () => {
   }, [auth]);
 
   return (
-    <Page name="home">
+    <Page name="distribution-graph">
       <NavbarComponent />
-      
-      <Block>
-        {currentUser && <StatisticView currentUser={currentUser} />}
-      </Block>
-      
-      {loginScreenOpened && 
-        <Login 
-          closeLoginScreen={() => setLoginScreenOpened(false)} 
-        />
-      }
+
+      <Block>{currentUser && <TaskTypeDistributionGraph />}</Block>
+
+      {loginScreenOpened && (
+        <Login closeLoginScreen={() => setLoginScreenOpened(false)} />
+      )}
     </Page>
   );
 };

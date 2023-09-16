@@ -11,6 +11,7 @@ import { firestore } from "../../js/firebase";
 import { collection, getDocs, onSnapshot, query } from "firebase/firestore";
 import { StatRecord, months } from "../../js/types";
 import YearTimeline from "../timeline/year";
+import store from "../../js/store";
 const StatisticView = ({ currentUser }) => {
   const [user, setCurrentUser] = useState<User>(currentUser);
   const [statMatrix, setStatMatrix] = useState({});
@@ -66,6 +67,7 @@ const StatisticView = ({ currentUser }) => {
             });
             setTimeout(() => {
               setStatMatrix(matrix as StatRecord);
+              store.dispatch("setStatsMatrix", matrix);
             }, 1000);
           });
         });

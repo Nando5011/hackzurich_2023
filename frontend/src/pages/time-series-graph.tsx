@@ -11,6 +11,7 @@ import { auth } from "../js/firebase";
 import StatisticView from "../components/statistic-view/statistic-view";
 import Login from "../components/login/login";
 import NavbarComponent from "../components/navbar/navbar";
+import TimeSeriesGraph from "../components/plots/TimeSeriesGraph";
 
 const HomePage = () => {
   const [loginScreenOpened, setLoginScreenOpened] = useState(false);
@@ -24,11 +25,11 @@ const HomePage = () => {
   }, [auth]);
 
   return (
-    <Page name="home">
+    <Page name="time-series">
       <NavbarComponent />
       
       <Block>
-        {currentUser && <StatisticView currentUser={currentUser} />}
+        {currentUser && <TimeSeriesGraph />}
       </Block>
       
       {loginScreenOpened && 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Navbar, NavTitle, Link, NavRight, NavLeft } from 'framework7-react';
+import React from "react";
+import { Navbar, NavTitle, Link, NavRight, NavLeft } from "framework7-react";
 import { auth } from "../../js/firebase";
 import { signOut } from "firebase/auth";
 
@@ -14,7 +14,9 @@ const NavbarComponent = () => {
       <NavRight>
         <Link onClick={signOutUser}>Sign Out</Link>
       </NavRight>
-        <Link icon="stats" href="/stats">Stats</Link>
+      <Link icon="stats" href="/stats">
+        Stats
+      </Link>
     </Navbar>
   );
 };

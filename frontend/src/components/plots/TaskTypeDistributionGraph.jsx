@@ -1,13 +1,27 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import React, { useState, useEffect } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import store from "../../js/store";
 
-const TaskTypeDistributionGraph = ({ statMatrix }) => {
-  const dataForGraph = Object.keys(statMatrix).map(year => {
+const TaskTypeDistributionGraph = () => {
+  const [statMatrix, setStatMatrix] = useState({});
+  useEffect(() => {
+    setStatMatrix(store.getters.stats);
+  }, []);
+
+  const dataForGraph = Object.keys(statMatrix).map((year) => {
     let yearData = { name: year };
 
-    Object.keys(statMatrix[year]).forEach(month => {
-      Object.keys(statMatrix[year][month]).forEach(day => {
-        statMatrix[year][month][day].forEach(task => {
+    Object.keys(statMatrix[year]).forEach((month) => {
+      Object.keys(statMatrix[year][month]).forEach((day) => {
+        statMatrix[year][month][day].forEach((task) => {
           if (!yearData[task.type]) yearData[task.type] = 0;
           yearData[task.type]++;
         });
@@ -23,7 +37,10 @@ const TaskTypeDistributionGraph = ({ statMatrix }) => {
       height={300}
       data={dataForGraph}
       margin={{
-        top: 5, right: 30, left: 20, bottom: 5,
+        top: 5,
+        right: 30,
+        left: 20,
+        bottom: 5,
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
