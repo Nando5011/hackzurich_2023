@@ -1,7 +1,6 @@
 from keylogger import KeyLogger
 import threading
 import time
-import timeit
 
 WPM_THRESHOLD = 30
 CPM_THRESHOLD = 150
@@ -128,6 +127,3 @@ class Analyzer:
             onRBUThresholdExceededThread.start()
         statusThread = threading.Thread(target=self.__printStatus, args=(), kwargs={})
         statusThread.start()
-
-ANALYZEREFRESHTIME = 5
-analyzer = Analyzer(ANALYZEREFRESHTIME)
