@@ -1,6 +1,8 @@
 from keylogger import KeyLogger
+from mouselogger import MouseLogger
 import threading
 import time
+import math
 
 WPM_THRESHOLD = 30
 CPM_THRESHOLD = 150
@@ -18,13 +20,16 @@ RBU_THRESHOLD = 0.1
 class Analyzer:
     def __init__(self, refreshTime: int, shortTimeHistoryTimeSpan: int):
         self.keylogger = KeyLogger(shortTimeHistoryTimeSpan)
+        self.mouselogger = MouseLogger()
         self.REFRESH_TIME = refreshTime
-        self.latestActivity = []
+        self.latestKeyboardActivity = []
+        self.latestMouseActivity = []
         self.__run()
 
     def __updateLatestActivity(self):
-        self.latestActivity = []
-        self.latestActivity = self.keylogger.getLatestActivity()
+        self.latestKeyboardActivity = []
+        self.latestKeyboardActivity = self.keylogger.getLatestActivity()
+        self.latestMouseActivity = self.mouselogger.getLatestActivity()
 
     def __run(self):
         while(True):
@@ -56,21 +61,21 @@ class Analyzer:
         print(self.__getLatestValues())
 
     def __getLatestCPM(self):
-        cpm = len(self.latestActivity) / (self.REFRESH_TIME / 60)
+        cpm = len(self.latestKeyboardActivity) / (self.REFRESH_TIME / 60)
         return cpm
 
     def __getLatestWPM(self):
-        wpm = len(self.latestActivity) / (self.REFRESH_TIME / 60) / 5
+        wpm = len(self.latestKeyboardActivity) / (self.REFRESH_TIME / 60) / 5
         return wpm
 
     def __getLatestSpeedVariation(self):
         speedVariation = 0
-        for i in range(len(self.latestActivity) - 1):
-            timeDelta = self.latestActivity[i + 1][1] - self.latestActivity[i][1]
+        for i in range(len(self.latestKeyboardActivity) - 1):
+            timeDelta = self.latestKeyboardActivity[i + 1][1] - self.latestKeyboardActivity[i][1]
             speedVariation += timeDelta.seconds
 
-        if len(self.latestActivity) != 0:
-            speedVariation /= len(self.latestActivity)
+        if len(self.latestKeyboardActivity) != 0:
+            speedVariation /= len(self.latestKeyboardActivity)
             return speedVariation
         else:
             return 0
@@ -82,7 +87,7 @@ class Analyzer:
         The ABU is a value that shows how often the user uses the backspace key.
         """
         backspaceCount = 0
-        for entry in self.latestActivity:
+        for entry in self.latestKeyboardActivity:
             if entry[0] == "Key.backspace":
                 backspaceCount += 1
         return backspaceCount
@@ -94,10 +99,25 @@ class Analyzer:
         The RBU is a value that shows how often the user uses the backspace key relative to the other keys.
         """
         backspaceCount = self.__getLatestABU()
-        if len(self.latestActivity) == 0:
+        if len(self.latestKeyboardActivity) == 0:
             return 0
-        rbu = backspaceCount / len(self.latestActivity)
+        rbu = backspaceCount / len(self.latestKeyboardActivity)
         return rbu
+
+    def __getLatestAvgMouseSpeed(self):
+        NOMOVEMENT_SPEED = 30
+        numMouseMovements = 0
+        speeds = []
+        for activity in self.latestMouseActivity:
+            # Only count speed if mouse was actually moving a bit
+            if(activity[0] >= NOMOVEMENT_SPEED):
+                speeds.append(activity[0])
+        # Return avg speed
+        if(len(speeds) > 0):
+            return sum(speeds) / len(speeds)
+        else:
+            return 0
+
 
     def __getLatestValues(self):
         return {
@@ -105,7 +125,8 @@ class Analyzer:
             "WPM": self.__getLatestWPM(),
             "SpeedVariation": self.__getLatestSpeedVariation(),
             "ABU": self.__getLatestABU(),
-            "RBU": self.__getLatestRBU()
+            "RBU": self.__getLatestRBU(),
+            "avgMouseSpeed": self.__getLatestAvgMouseSpeed()
         }
 
     def __checkForThresholds(self):
@@ -125,5 +146,7 @@ class Analyzer:
         if values["RBU"] > RBU_THRESHOLD:
             onRBUThresholdExceededThread = threading.Thread(target=self.__onRBUThresholdExceeded, args=(), kwargs={})
             onRBUThresholdExceededThread.start()
+        # if values["avgMouseSpeed"] > 100:
+            # toSth()
         statusThread = threading.Thread(target=self.__printStatus, args=(), kwargs={})
         statusThread.start()
