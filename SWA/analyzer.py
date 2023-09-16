@@ -24,7 +24,7 @@ class Analyzer:
         self.__run()
 
     def __updateShortTimeHistory(self):
-        self.shortTimeHistory.clear()
+        self.shortTimeHistory = []
         self.shortTimeHistory = self.keylogger.getShortTimeHistory()
 
     def __run(self):
@@ -125,6 +125,3 @@ class Analyzer:
             onRBUThresholdExceededThread.start()
         statusThread = threading.Thread(target=self.__printStatus, args=(), kwargs={})
         statusThread.start()
-
-ANALYZEREFRESHTIME = 5
-analyzer = Analyzer(ANALYZEREFRESHTIME)
