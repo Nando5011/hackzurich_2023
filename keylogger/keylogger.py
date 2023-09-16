@@ -8,11 +8,11 @@ import os
 # A history of the last key presses can be accesses via getShortTimeHistory()
 # How long this history is is set via the maxShortTimeHistoryTimeSpan parameter
 class KeyLogger:
-    def __init__(self, maxShortTimeHistoryTimeSpan: datetime):
+    def __init__(self, maxShortTimeHistoryTimeSpan: int):
         self.shortTimeHistory = []
         listener = keyboard.Listener(on_press=self.__onKeyPress)
         listener.start()
-        self.MAX_SHORTIMEHISTORYTIMESPAN = maxShortTimeHistoryTimeSpan
+        self.MAX_SHORTIMEHISTORYTIMESPAN = datetime.timedelta(seconds=maxShortTimeHistoryTimeSpan)
     # Get a timeDelta from the given comparetime (as string) and the current system time
     def __getTimeDeltaToNow(self, compareTime):
         currentTime = datetime.datetime.now()
@@ -43,6 +43,8 @@ class KeyLogger:
                     shortTimeHistoryTimeSpan = timedelta(hours=0, minutes=0, seconds=0)
         except Exception as inst:
             print("EXCEPTION CATCHED. TYPE: " + str(type(inst)))    # the exception type
+            print("EXCEPTION CATCHED. ARGS: " + str(inst.args))     # arguments stored in .args
+            print("EXCEPTION CATCHED. INSTANCE: " + str(inst))      # __str__ allows args to be printed directly,
 
     # Get short time history. The STH shows every keystroke in the configured time span
     def getShortTimeHistory(self):
