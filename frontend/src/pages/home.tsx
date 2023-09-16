@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Page,
-  Block,
-} from "framework7-react";
+import { Page, Block, f7, Toolbar } from "framework7-react";
 
-import { 
-  User
-} from "firebase/auth";
+import { User, signOut } from "firebase/auth";
 import { auth } from "../js/firebase";
 import StatisticView from "../components/statistic-view/statistic-view";
 import Login from "../components/login/login";
@@ -17,25 +12,43 @@ const HomePage = () => {
   const [currentUser, setCurrentUser] = useState<null | User>(null);
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (!user?.email) setLoginScreenOpened(true);
-      else setCurrentUser(user);
+      else {
+        setCurrentUser(user);
+        setLoginScreenOpened(false);
+      }
     });
+    return () => {
+      unsubscribe();
+    };
   }, [auth]);
+
+  const signOutUser = () => {
+    signOut(auth).then(() => window.location.reload());
+  };
 
   return (
     <Page name="home">
-      <NavbarComponent />
-      
-      <Block>
-        {currentUser && <StatisticView currentUser={currentUser} />}
-      </Block>
-      
-      {loginScreenOpened && 
-        <Login 
-          closeLoginScreen={() => setLoginScreenOpened(false)} 
-        />
-      }
+      {currentUser && (
+        <Toolbar position="bottom">
+          <p
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
+            {currentUser.email}
+          </p>
+        </Toolbar>
+      )}
+      {currentUser && (
+        <>
+          <NavbarComponent signOutUser={signOutUser} />
+          <StatisticView currentUser={currentUser} />
+        </>
+      )}
+
+      {loginScreenOpened && (
+        <Login closeLoginScreen={() => setLoginScreenOpened(false)} />
+      )}
     </Page>
   );
 };

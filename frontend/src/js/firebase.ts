@@ -9,14 +9,15 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCzUSeLToQ1X1vNW1brnkcHcWJif33HRxE",
-  authDomain: "hackzurich23-8212.firebaseapp.com",
-  projectId: "hackzurich23-8212",
-  storageBucket: "hackzurich23-8212.appspot.com",
-  messagingSenderId: "432778287112",
-  appId: "1:432778287112:web:57017c368ff6c03d4899bd",
+  apiKey: "AIzaSyCvtLA9rTf6Nc74ZKyeGP1QXFl0svma30w",
+  authDomain: "hackzurich2023-502ac.firebaseapp.com",
+  databaseURL:
+    "https://hackzurich2023-502ac-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "hackzurich2023-502ac",
+  storageBucket: "hackzurich2023-502ac.appspot.com",
+  messagingSenderId: "659583248270",
+  appId: "1:659583248270:web:1e4903e77a7ae0c20da6df",
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

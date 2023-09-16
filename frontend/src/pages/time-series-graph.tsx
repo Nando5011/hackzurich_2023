@@ -26,7 +26,6 @@ const HomePage = () => {
 
   return (
     <Page name="time-series">
-      <NavbarComponent />
       
       <Block>
         {currentUser && <TimeSeriesGraph />}

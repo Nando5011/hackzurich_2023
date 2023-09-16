@@ -13,7 +13,7 @@ if sys.platform == "darwin":
 
 def get_pid_of_active_window():
     # call the test script and get the output
-    output = subprocess.check_output(["python3", "keylogger/get_pid.py"])
+    output = subprocess.check_output(["python3", "SWA/get_pid.py"])
     # decode the output
     output = output.decode("utf-8")
     # split the output into lines

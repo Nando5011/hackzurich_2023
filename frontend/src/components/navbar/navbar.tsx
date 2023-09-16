@@ -1,22 +1,18 @@
 import React from "react";
 import { Navbar, NavTitle, Link, NavRight, NavLeft } from "framework7-react";
-import { auth } from "../../js/firebase";
-import { signOut } from "firebase/auth";
 
-const NavbarComponent = () => {
-  const signOutUser = () => {
-    signOut(auth);
-  };
-
+const NavbarComponent = ({ signOutUser }) => {
   return (
     <Navbar>
-      <NavTitle>ProLog</NavTitle>
-      <NavRight>
+      <NavLeft>
         <Link onClick={signOutUser}>Sign Out</Link>
+      </NavLeft>
+      <NavTitle style={{ margin: "auto" }}>ProLog</NavTitle>
+      <NavRight>
+        <Link icon="stats" href="/stats">
+          Stats
+        </Link>
       </NavRight>
-      <Link icon="stats" href="/stats">
-        Stats
-      </Link>
     </Navbar>
   );
 };

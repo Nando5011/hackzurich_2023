@@ -21,8 +21,6 @@ const HomePage = () => {
 
   return (
     <Page name="distribution-graph">
-      <NavbarComponent />
-
       <Block>{currentUser && <TaskTypeDistributionGraph />}</Block>
 
       {loginScreenOpened && (

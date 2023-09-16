@@ -28,11 +28,19 @@ const Login = ({ closeLoginScreen }) => {
         f7.loginScreen.close();
       })
       .catch((error) => {
-        createUserWithEmailAndPassword(auth, email, password).then((user) => {
-          f7.dialog.alert("Login created for new user", () =>
-            f7.loginScreen.close()
-          );
-        });
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((user) => {
+            f7.dialog.alert("Login created for new user", () =>
+              f7.loginScreen.close()
+            );
+          })
+          .catch((error) => {
+            if (error.message.includes("email-already-in-use")) {
+              f7.dialog.alert("Wrong Password");
+            } else {
+              f7.dialog.alert("Password length minimum 6");
+            }
+          });
       });
   };
 
@@ -66,14 +74,18 @@ const Login = ({ closeLoginScreen }) => {
             onInputEmpty={() => setIsInvalidPassword(true)}
           />
         </List>
-        <List inset>
-          <Button disabled={isValidEmail || isValidPassword} onClick={signIn}>
-            Sign In
-          </Button>
-          <BlockFooter>
-            Provide email and password to sign in or sign up
-          </BlockFooter>
-        </List>
+        <Button
+          fill
+          large
+          disabled={isValidEmail || isValidPassword}
+          onClick={signIn}
+          style={{ width: "fit-content", margin: "auto" }}
+        >
+          Sign In
+        </Button>
+        <BlockFooter>
+          Provide email and password to sign in or sign up
+        </BlockFooter>
       </Page>
     </LoginScreen>
   );
