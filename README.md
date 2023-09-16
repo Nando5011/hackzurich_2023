@@ -129,35 +129,13 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/Nando5011/hackzurich_2023](https://github.com/Nando5011/hackzurich_2023)
-
-
-
-
-
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* Jerry ...
+* Nando Imboden (@Nando5011)
+* Florian Thiévent (@0x49b)
+* Leo Hofer ([leohofer.dev](https://leohofer.dev))
 
 
 
