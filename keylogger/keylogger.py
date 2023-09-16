@@ -9,18 +9,7 @@ import os
 MAX_SHORTIMEHISTORYTIMESPAN = timedelta(seconds=300)
 
 def getTimeStampFromHistoryEntry(entry):
-    earliestTimeInHistory = entry
-    # Split the string at the semicolon
-    parts = entry.split(';')
-
-    # Check if there was a semicolon in the string
-    if len(parts) > 1:
-        # Select the part after the semicolon (index 1)
-        earliestTimeInHistory = parts[1]
-    else:
-        # Handle the case when there is no semicolon
-        earliestTimeInHistory = entry
-    return earliestTimeInHistory
+    return entry[1]
 
 class KeyLogger:
     def __init__(self):
@@ -30,14 +19,14 @@ class KeyLogger:
     # Get a timeDelta from the given comparetime (as string) and the current system time
     def getTimeDeltaToNow(self, compareTime):
         currentTime = datetime.datetime.now()
-        timeDelta = currentTime - datetime.datetime.strptime(compareTime, '%H:%M:%S')
+        timeDelta = currentTime - compareTime
         return timeDelta
 
+    # Callback function that has to be called on keypress
     def onKeyPress(self, keyStr):
-        self.shortTimeHistory.append(keyStr + ";" + datetime.datetime.now().strftime('%H:%M:%S'))
+        self.shortTimeHistory.append((keyStr, datetime.datetime.now()))
         try:
             if(len(self.shortTimeHistory) != 0):
-                # fix, if keyStr is "key.XXX", then somehwo only the "key." is removed instead of the whole?
                 earliestTimeStampInHistory = getTimeStampFromHistoryEntry(self.shortTimeHistory[0])
                 shortTimeHistoryTimeSpan = self.getTimeDeltaToNow(earliestTimeStampInHistory)
             else:
@@ -53,6 +42,7 @@ class KeyLogger:
         except Exception as inst:
             print("EXCEPTION CATCHED. TYPE: " + str(type(inst)))    # the exception type
 
+    # Get short time history. The STH shows every keystroke in the configured time span
     def getShortTimeHistory(self):
         return self.shortTimeHistory
 
