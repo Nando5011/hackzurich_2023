@@ -23,8 +23,3 @@ def get_active_window_title():
         cmd = psutil.Process(pid).cmdline()
         cmd = " ".join(cmd)
         return cmd
-
-time.sleep(5)
-
-print("Active window title:")
-print(get_active_window_title())
