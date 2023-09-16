@@ -16,20 +16,20 @@ RBU_THRESHOLD = 0.1
 # IMPORTANT: The creation of the threads also needs some time (~1-2 seconds on easy cases), so do not
 # choose a refresh time of atleast 5 seconds.
 class Analyzer:
-    def __init__(self, refreshTime: int):
-        self.keylogger = KeyLogger(refreshTime)
+    def __init__(self, refreshTime: int, shortTimeHistoryTimeSpan: int):
+        self.keylogger = KeyLogger(shortTimeHistoryTimeSpan)
         self.REFRESH_TIME = refreshTime
         self.latestActivity = []
         self.__run()
 
-    def __updateShortTimeHistory(self):
+    def __updateLatestActivity(self):
         self.latestActivity = []
         self.latestActivity = self.keylogger.getLatestActivity()
 
     def __run(self):
         while(True):
             startTime = time.time()
-            self.__updateShortTimeHistory()
+            self.__updateLatestActivity()
             self.__checkForThresholds()
             endTime = time.time()
             runTime = endTime - startTime
