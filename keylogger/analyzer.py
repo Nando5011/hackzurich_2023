@@ -28,6 +28,31 @@ class Analyzer:
             return speedVariation
         else:
             return 0
+        
+    def getABU(self):
+        """
+        ABU = Absolute Backspace Usage
+
+        The ABU is a value that shows how often the user uses the backspace key.
+        """
+        shortTimeHistory = self.keylogger.getShortTimeHistory()
+        backspaceCount = 0
+        for entry in shortTimeHistory:
+            if(entry[0] == "Key.backspace"):
+                backspaceCount += 1
+        return backspaceCount
+    
+    def getRBU(self):
+        """
+        RBU = Relative Backspace Usage
+
+        The RBU is a value that shows how often the user uses the backspace key relative to the other keys.
+        """
+        shortTimeHistory = self.keylogger.getShortTimeHistory()
+        backspaceCount = self.getABU()
+        rbu = backspaceCount / len(shortTimeHistory)
+        return rbu
+        
 
 analyzer = Analyzer(10)
     
