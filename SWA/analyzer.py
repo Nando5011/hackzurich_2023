@@ -18,14 +18,14 @@ RBU_THRESHOLD = 0.1
 # choose a refresh time of atleast 5 seconds.
 class Analyzer:
     def __init__(self, refreshTime: int):
-        self.keylogger = KeyLogger(refreshTime)
+        self.keylogger = KeyLogger(refreshTime, refreshTime)
         self.REFRESH_TIME = refreshTime
-        self.shortTimeHistory = []
+        self.latestActivity = []
         self.__run()
 
     def __updateShortTimeHistory(self):
-        self.shortTimeHistory = []
-        self.shortTimeHistory = self.keylogger.getShortTimeHistory()
+        self.latestActivity = []
+        self.latestActivity = self.keylogger.getLatestActivity()
 
     def __run(self):
         while(True):
@@ -54,21 +54,21 @@ class Analyzer:
         print(self.__getLatestValues())
 
     def __getLatestCPM(self):
-        cpm = len(self.shortTimeHistory) / (self.REFRESH_TIME / 60)
+        cpm = len(self.latestActivity) / (self.REFRESH_TIME / 60)
         return cpm
 
     def __getLatestWPM(self):
-        wpm = len(self.shortTimeHistory) / (self.REFRESH_TIME / 60) / 5
+        wpm = len(self.latestActivity) / (self.REFRESH_TIME / 60) / 5
         return wpm
 
     def __getLatestSpeedVariation(self):
         speedVariation = 0
-        for i in range(len(self.shortTimeHistory) - 1):
-            timeDelta = self.shortTimeHistory[i + 1][1] - self.shortTimeHistory[i][1]
+        for i in range(len(self.latestActivity) - 1):
+            timeDelta = self.latestActivity[i + 1][1] - self.latestActivity[i][1]
             speedVariation += timeDelta.seconds
 
-        if len(self.shortTimeHistory) != 0:
-            speedVariation /= len(self.shortTimeHistory)
+        if len(self.latestActivity) != 0:
+            speedVariation /= len(self.latestActivity)
             return speedVariation
         else:
             return 0
@@ -80,7 +80,7 @@ class Analyzer:
         The ABU is a value that shows how often the user uses the backspace key.
         """
         backspaceCount = 0
-        for entry in self.shortTimeHistory:
+        for entry in self.latestActivity:
             if entry[0] == "Key.backspace":
                 backspaceCount += 1
         return backspaceCount
@@ -92,9 +92,9 @@ class Analyzer:
         The RBU is a value that shows how often the user uses the backspace key relative to the other keys.
         """
         backspaceCount = self.__getLatestABU()
-        if len(self.shortTimeHistory) == 0:
+        if len(self.latestActivity) == 0:
             return 0
-        rbu = backspaceCount / len(self.shortTimeHistory)
+        rbu = backspaceCount / len(self.latestActivity)
         return rbu
 
     def __getLatestValues(self):
@@ -125,3 +125,6 @@ class Analyzer:
             onRBUThresholdExceededThread.start()
         statusThread = threading.Thread(target=self.__printStatus, args=(), kwargs={})
         statusThread.start()
+
+ANALYZEREFRESHTIME = 5
+analyzer = Analyzer(ANALYZEREFRESHTIME)
