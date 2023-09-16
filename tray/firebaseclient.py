@@ -1,44 +1,40 @@
-from firebase import firebase
-import firebase_admin
-from firebase_admin import credentials, db
-from dotenv import load_dotenv
 import os 
-
-"""
 import firebase_admin
-from firebase_admin import credentials
+import firebase_admin
+from firebase_admin import firestore, db, credentials
 
-cred = credentials.Certificate("path/to/serviceAccountKey.json")
-firebase_admin.initialize_app(cred)
-"""
+
 
 
 class FirebaseClient:
-
-
+    
     def __init__(self) -> None:
-        
-        load_dotenv()
-
-        self.firebase_credentials = credentials.Certificate({
-            "apiKey": "AIzaSyCzUSeLToQ1X1vNW1brnkcHcWJif33HRxE",
-            "authDomain": "hackzurich23-8212.firebaseapp.com",
-            "projectId": "hackzurich23-8212",
-            "storageBucket": "hackzurich23-8212.appspot.com",
-            "messagingSenderId": "432778287112",
-            "appId": "1:432778287112:web:57017c368ff6c03d4899bd",
-        })
-        
-        self.firebase = firebase_admin.initialize_app(self.firebase_credentials)
-        self.ref = db.reference('/users')
-        print(self.ref)
+        # Initialize Firebase Admin SDK with your credentials file
+        self.cred = credentials.Certificate(os.path.join(os.getcwd(), 'tray', 'firebase.json'))
+        self.firebase = firebase_admin.initialize_app(self.cred)
+        self.db = firestore.client()
     
-    def authenticate(self)->None:
-        pass
     
-    def get_users(self) -> None:
-        pass
+    def test_connection(self, user, email)->None:
+        # Example: Add a document to a collection
+        data = {
+            'name': user,
+            'email': email
+        }
 
+        # Add a new document with a generated ID
+        doc_ref = self.db.collection('users').add(data)
+        print(f'Document added with ID: {doc_ref}')
 
+        # Example: Query documents from a collection
+        users_ref = self.db.collection('users')
+        docs = users_ref.stream()
 
+        for doc in docs:
+            print(f'Document ID: {doc.id}')
+            print(f'Name: {doc.to_dict()["name"]}')
+            print(f'Email: {doc.to_dict()["email"]}')
+            print()
 
+    def send_data_to_firestore(self, data)-> None:
+        print(data)
