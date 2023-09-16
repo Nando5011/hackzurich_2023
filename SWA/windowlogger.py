@@ -35,6 +35,7 @@ class WindowLogger:
     
     def __init__(self, interval: datetime.timedelta):
         self.activeWindowHistory = []
+        self.activeWindowHistoryCompacted = []
         self.interval = interval
 
     def __logActiveWindowName(self):
@@ -45,6 +46,16 @@ class WindowLogger:
         process = psutil.Process(int(pid))
         processName = process.exe()
         self.activeWindowHistory.append((processName, datetime.datetime.now()))
+
+        # log to compacted history
+        if len(self.activeWindowHistoryCompacted) == 0:
+            self.activeWindowHistoryCompacted.append((processName, datetime.datetime.now()))
+        else:
+            lastEntry = self.activeWindowHistoryCompacted[-1]
+            if lastEntry[0] == processName:
+                self.activeWindowHistoryCompacted[-1] = (processName, lastEntry[1] + self.interval)
+            else:
+                self.activeWindowHistoryCompacted.append((processName, datetime.datetime.now()))
             
 
 
@@ -58,6 +69,9 @@ class WindowLogger:
 
     def getActiveWindowHistory(self):
         return self.activeWindowHistory
+    
+    def getActiveWindowHistoryCompacted(self):
+        return self.activeWindowHistoryCompacted
     
     def getTimePerWindow(self):
         timePerWindow = {}
