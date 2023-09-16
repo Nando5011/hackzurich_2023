@@ -5,9 +5,8 @@ import {
   Tooltip,
   Legend,
   Cell,
-  ResponsiveContainer,
 } from "recharts";
-import { Block, BlockTitle } from "framework7-react";
+import { Block } from "framework7-react";
 import store from "../../js/store";
 
 const TaskTypeDistributionGraph = () => {
@@ -54,8 +53,8 @@ const TaskTypeDistributionGraph = () => {
   return (
     <Block>
       <PieChart
-        width={windowSize.width * 0.95}
-        height={windowSize.width * 0.95}
+        width={windowSize.width * 0.80}
+        height={windowSize.height * 0.75}
         style={{ margin: "auto" }}
       >
         <Pie

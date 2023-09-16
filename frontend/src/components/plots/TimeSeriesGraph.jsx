@@ -64,25 +64,26 @@ const TimeSeriesGraph = () => {
 
   return (
     <Block>
-      <ResponsiveContainer width={windowSize.width * 0.95} height={windowSize.height * 0.5}>
-        <LineChart
-          data={dataForGraph}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="taskCount" stroke="#8884d8" activeDot={{ r: 8 }} />
-        </LineChart>
-      </ResponsiveContainer>
-    </Block>
+      <LineChart
+        width={windowSize.width * 0.80}
+        height={windowSize.height * 0.75}
+        style={{ margin: "auto" }}
+        data={dataForGraph}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="taskCount" stroke="#8884d8"  activeDot={{ r: 12}} strokeWidth={10} />
+      </LineChart>
+    </Block >
   );
 };
 
