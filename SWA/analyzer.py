@@ -126,7 +126,8 @@ class Analyzer:
             "SpeedVariation": self.__getLatestSpeedVariation(),
             "ABU": self.__getLatestABU(),
             "RBU": self.__getLatestRBU(),
-            "avgMouseSpeed": self.__getLatestAvgMouseSpeed()
+            "avgMouseSpeed": self.__getLatestAvgMouseSpeed(),
+            "mouseActive": True if (self.__getLatestAvgMouseSpeed() > 0) else False
         }
 
     def __checkForThresholds(self):
