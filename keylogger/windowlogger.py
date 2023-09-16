@@ -1,25 +1,82 @@
 import sys
 import pygetwindow as gw
+import time
+import asyncio
+import threading
+import datetime
+import subprocess
+import shlex
 import psutil
 
 if sys.platform == "darwin":
     from AppKit import NSWorkspace
 
-def get_active_window_title():
-    if sys.platform == "darwin":
-        front_window_info = NSWorkspace.sharedWorkspace().frontmostApplication()
-        pid = front_window_info.processIdentifier()
+def get_pid_of_active_window():
+    # call the test script and get the output
+    output = subprocess.check_output(["python3", "keylogger/get_pid.py"])
+    # decode the output
+    output = output.decode("utf-8")
+    # split the output into lines
+    output = output.split("\n")
+    # remove the last line, because it is empty
+    output.pop()
+    # remove the first line, because it is a header
+    output.pop(0)
+    # remove the last line, because it is a footer
 
-        # get process cmd using pid
-        cmd = psutil.Process(pid).cmdline()
-        cmd = " ".join(cmd)
-        return cmd
+    return output
 
-    elif sys.platform == "win32" or sys.platform == "cygwin" or sys.platform == "msys":
-        active_window = gw.getActiveWindow()
-        pid = active_window.processId
 
-        # get process cmd using pid
-        cmd = psutil.Process(pid).cmdline()
-        cmd = " ".join(cmd)
-        return cmd
+class WindowLogger:
+    """This class logs the active window.
+
+    the report since the last report can be accessed via getActiveWindowHistory()
+    """
+    
+    def __init__(self, interval: datetime.timedelta):
+        self.activeWindowHistory = []
+        self.interval = interval
+
+    def __logActiveWindowName(self):
+        pid = get_pid_of_active_window()
+        if len(pid) == 0:
+            return
+        pid = pid[0]
+        process = psutil.Process(int(pid))
+        processName = process.exe()
+        self.activeWindowHistory.append((processName, datetime.datetime.now()))
+            
+
+
+    async def __run(self):
+        while True:
+            self.__logActiveWindowName()
+            await asyncio.sleep(self.interval.seconds)
+
+    def start(self):
+        asyncio.run(self.__run())
+
+    def getActiveWindowHistory(self):
+        return self.activeWindowHistory
+    
+    def getTimePerWindow(self):
+        timePerWindow = {}
+        for entry in self.activeWindowHistory:
+            if entry[0] in timePerWindow:
+                timePerWindow[entry[0]] += self.interval.seconds
+            else:
+                timePerWindow[entry[0]] = self.interval.seconds
+        return timePerWindow
+
+if __name__ == "__main__":
+    windowLogger = WindowLogger(datetime.timedelta(seconds=1))
+    thread = threading.Thread(target=windowLogger.start)
+    thread.start()
+    print("Started window logger")
+    while True:
+        # pretty print the time per window
+        timePerWindow = windowLogger.getTimePerWindow()
+        print("Time per window:")
+        for key in timePerWindow:
+            print(key + ": " + str(timePerWindow[key]))
+        time.sleep(10)
