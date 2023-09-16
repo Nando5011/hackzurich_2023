@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QRCODE</title>
+        <style>
+            *{font-family: 'Helvetica', 'Arial', sans-serif;}
+            h2{width: 100%; text-align: center;}
+            img{width: 100%; height: auto;}
+        </style>
+    </head>
+    <body id="body">
+        <h2>Let's have a Break</h2>
+        <img src="user_qrcode.png" alt="user-qrcode" />
+
+        <script>
+
+            const blurred = () => {
+                pywebview.api.window_blur()
+                console.debug("window blur")
+            }
+
+            window.addEventListener('blur', function() {
+                blurred();
+              });
+        </script>
+
+    </body>
+</html>
