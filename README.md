@@ -31,8 +31,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![Product Name Screen Shot][product-screenshot]
-
 Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
 
 
@@ -41,8 +39,11 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [![React][React.js]][React-url]
-* [![Framework 7][framework7.io]][Framework-Url]
+[![React][React.js]][React-url]
+[![Framework 7][framework7.io]][Framework-Url]
+[![Vite][vitejs.dev]][vite-url]
+[![Firebase][firebase.google.com]][firebase-url]
+[![Python3][python.org]][python-url]
 
 
 
@@ -106,6 +107,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
 
+![Product Name Screen Shot][product-screenshot]
 
 
 
@@ -188,5 +190,14 @@ Project Link: [https://github.com/Nando5011/hackzurich_2023](https://github.com/
 [React-url]: https://reactjs.org/
 [framework7.io]: https://img.shields.io/badge/Framework7-000000?style=for-the-badge&logo=framework7&logoColor=white
 [Framework-Url]: https://framework7.io/
+[vitejs.dev]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[vite-url]: https://vitejs.dev/
+
+[firebase.google.com]: https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black
+
+[firebase-url]: https://firebase.google.com/
+
+[python.org]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+[python-url]: https://www.python.org/
 
 [product-screenshot]: images/screenshot.png
