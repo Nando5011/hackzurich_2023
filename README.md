@@ -1,28 +1,15 @@
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/Nando5011/hackzurich_2023">
     <img src="images/logos/logo_512_transparent.png" alt="Logo" width="100" height="100">
   </a>
-<h3 align="center">project_title</h3>
+<h3 align="center">BreakWise</h3>
   <p align="center">
-    project_description
+    Smart Breaks. Productive Days.
     <br />
     <br />
-    <a href="https://github.com/Nando5011/hackzurich_2023">View Demo</a>
-    ·
-    <a href="https://github.com/Nando5011/hackzurich_2023/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/Nando5011/hackzurich_2023/issues">Request Feature</a>
-  </p>
+
 </div>
 
 
@@ -31,30 +18,32 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+By analyzing keylogger data, we can detect how productive a user is at any given time. Based on this data we can suggest breaks to the user, which will help them to stay productive troughout the day. 
 
+Additionaly we can detect how much time any appliocation is used and therefore simplify the task of time tracking.
 
-
-
+In order to protect the users privacy, all the keylogger data is stored locally on the users device and is only used to extract metrics about the users state of productivity. The only data that is sent to servers is the resulting metrics.
 
 ### Built With
+BreakWise can be split in two parts: The Software on the users working device and the webapp, which is used to display the metrics. 
 
+#### Backend
+[![Python3][python.org]][python-url]
+
+The logging software is written in python3 using [pynput](https://pypi.org/project/pynput/)
+
+#### Frontend
 [![React][React.js]][React-url]
 [![Framework 7][framework7.io]][Framework-Url]
 [![Vite][vitejs.dev]][vite-url]
 [![Firebase][firebase.google.com]][firebase-url]
-[![Python3][python.org]][python-url]
 
-
-
-
+The webapp is written in [React.js](https://reactjs.org/) using [Framework7](https://framework7.io/) and [Vite](https://vitejs.dev/). The data is stored in a [Firebase](https://firebase.google.com/) database.
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
+In order to use BreakWise you only need to install the logging software on your device and create an account on the webapp.
 
 ### Unix
 
@@ -78,25 +67,25 @@ To get a local copy up and running follow these simple example steps.
   python3 main.py
   ```
 
+### Windows
+1. Create python3 virtual environment
+  ```sh
+  python3 -m venv venv
+  ```
 
-### Installation
+2. Activate virtual environment
+  ```sh
+  venv\Scripts\activate.bat
+  ```
+3. Install requirements
+  ```sh
+  pip install -r SWA/requirements.txt
+  ```
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/Nando5011/hackzurich_2023.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-
-
+4. Run the app
+  ```sh
+  python3 main.py
+  ```
 
 
 <!-- USAGE EXAMPLES -->
