@@ -1,15 +1,35 @@
 export interface Stat {
-  deviceName: string;
-  records: [StatRecord];
-}
-
-interface StatRecord {
   date: string;
-  programLogArray: [ProgrammLog];
+  timestamps: [StatRecord];
 }
 
-interface ProgrammLog {
-  timestamp: string;
+export type StatRecord = {
+  number: [MonthObject];
+};
+
+interface MonthObject {
+  month: [DateObject];
+}
+interface DateObject {
+  date: [Log];
+}
+
+interface Log {
   task: string;
   taskType: string;
 }
+
+export const months = {
+  "01": "January",
+  "02": "February",
+  "03": "March",
+  "04": "April",
+  "05": "May",
+  "06": "June",
+  "07": "July",
+  "08": "August",
+  "09": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December",
+};

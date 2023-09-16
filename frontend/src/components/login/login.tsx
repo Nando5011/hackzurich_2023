@@ -29,12 +29,10 @@ const Login = ({ closeLoginScreen }) => {
       })
       .catch((error) => {
         createUserWithEmailAndPassword(auth, email, password).then((user) => {
-          f7.dialog.alert("Login created for new user", () => f7.loginScreen.close());
+          f7.dialog.alert("Login created for new user", () =>
+            f7.loginScreen.close()
+          );
         });
-        console.log(error);
-        if (error.code !== "auth/user-not-found") {
-          f7.dialog.alert("Login Failed, please try again");
-        }
       });
   };
 
