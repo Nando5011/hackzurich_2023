@@ -1,9 +1,9 @@
 import sys
 import pygetwindow as gw
-import time
-from AppKit import NSWorkspace
 import psutil
 
+if sys.platform == "darwin":
+    from AppKit import NSWorkspace
 
 def get_active_window_title():
     if sys.platform == "darwin":
