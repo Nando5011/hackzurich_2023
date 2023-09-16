@@ -5,12 +5,9 @@ import {
   Tooltip,
   Legend,
   Cell,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
-import {
-  Block,
-  BlockTitle,
-} from "framework7-react";
+import { Block, BlockTitle } from "framework7-react";
 import store from "../../js/store";
 
 const TaskTypeDistributionGraph = () => {
@@ -29,13 +26,12 @@ const TaskTypeDistributionGraph = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
-
 
   const taskTypeCounts = {};
 
@@ -57,26 +53,24 @@ const TaskTypeDistributionGraph = () => {
 
   return (
     <Block>
-      <ResponsiveContainer width={windowSize.width * 0.95} height={windowSize.height * 0.5}>
-        <PieChart>
-          <Pie
-            data={dataForGraph}
-            cx={400}
-            cy={250}
-            labelLine={false}
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-            outerRadius={200}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {dataForGraph.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={getColorByIndex(index)} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+      <PieChart
+        width={windowSize.width * 0.95}
+        height={windowSize.width * 0.95}
+        style={{ margin: "auto" }}
+      >
+        <Pie
+          data={dataForGraph}
+          labelLine={false}
+          fill="#8884d8"
+          dataKey="value"
+        >
+          {dataForGraph.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={getColorByIndex(index)} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend />
+      </PieChart>
     </Block>
   );
 };
