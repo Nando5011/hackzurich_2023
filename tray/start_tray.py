@@ -38,7 +38,7 @@ class Tray:
             width=250, 
             height=320, 
             y=0, 
-            x=self.calculate_position_of_tray_view(250, 320),
+            x=self.calculate_position_of_tray_view((250, 320))[0],
             js_api=QRApi()
             )
         self.qrcode_window.events.closing += self.on_closing
@@ -47,21 +47,16 @@ class Tray:
         self.uuid = self.generate_uuid()
         self.generate_qrcode(self.uuid)
     
-    def calculate_position_of_tray_view(self, dimensions:(int,int) = (0,0)) -> (int, int):
+    def calculate_position_of_tray_view(self, dimensions) -> (int, int):
         for m in get_monitors():
             if m.is_primary:
                     
                 if sys.platform == 'darwin':
                     return (round(m.width*0.6), 0)
+                
                 if sys.platform == 'win32' or sys.platform == 'cygwin' or sys.platform == 'msys':
                     return (round(m.width * 0.6), round(m.height-dimensions[1]))
                 
-       
-                    
-                
-                
-
-    
     def init_firebase(self) -> None:    
         pass
 
