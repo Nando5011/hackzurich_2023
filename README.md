@@ -22,3 +22,25 @@ Some people tend to not take a break because they are afraid they might lose the
 At the end of the day, show the user what he has achieved and how his day looked like in terms of productivity and workflow, on what projects he worked on for how long etc.<br>
 ***Why?***<br>
 Motivate the user
+
+## **Typing Quality Metrics**
+Different metricvs which give an insight into the typing quality of the user. This could be used to determine the mental load of the user, or to determine if the user is in the flow or not. This could also be used to determine if the user is getting tired or not, and therefore if he should take a break.
+
+The input cata consists of a list ok KeyEvents.
+
+### **Typing Speed**
+
+-   **WPM** (Words per Minute)<br>
+    The average number of words typed per minute. This is calculated by dividing the number of characters typed by 5 (the average word length) and then dividing the result by the time in minutes.
+
+-   **CPM** (Characters per Minute)<br>
+    The average number of characters typed per minute. This is calculated by dividing the number of characters typed by the time in minutes.
+
+### **Typing Accuracy**
+
+-   **CER** (Character Error Rate)<br>
+    The percentage of characters typed incorrectly. This is calculated by dividing the number of characters typed incorrectly (backspce use) by the total number of characters typed.
+
+-  **ABU** (Absolute Backspace Usage)<br>
+    The number of backspaces used per minute. This is calculated by dividing the number of backspaces used by the time in minutes.
+
