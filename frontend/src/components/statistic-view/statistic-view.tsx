@@ -18,6 +18,8 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
   const [value, loading, error] = useCollection(collection(firestore, devicesRef));
 
   const fetchData = (callback?) => {
+    if (selectedDevice == "-") return;
+    console.log("fetching");
     const matrix = {};
     const qRecords = query(collection(firestore, devicesRef + "/" + selectedDevice + "/records"));
     getDocs(qRecords).then((qS) => {
@@ -32,25 +34,30 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
         getDocs(qTimestamps)
           .then((qS2) => {
             const dateSplit = doc.id.split("-");
+            let lastTask = "";
             qS2.docs.map((doc3) => {
-              if (!matrix[dateSplit[0]]) {
-                matrix[dateSplit[0] + ""] = [];
-              }
-              if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
-              }
-              if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]) {
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""] = [];
-              }
-              if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]["timestamps"]) {
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"] = [];
-              }
+              if (lastTask == doc3.data().task) {
+              } else {
+                lastTask = doc3.data().task;
+                if (!matrix[dateSplit[0]]) {
+                  matrix[dateSplit[0] + ""] = [];
+                }
+                if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
+                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
+                }
+                if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]) {
+                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""] = [];
+                }
+                if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]["timestamps"]) {
+                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"] = [];
+                }
 
-              // Push doc3.data() into the array
-              matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"].push({
-                ...doc3.data(),
-                timestamp: doc3.id,
-              });
+                // Push doc3.data() into the array
+                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"].push({
+                  ...doc3.data(),
+                  timestamp: doc3.id,
+                });
+              }
             });
           })
           .then(() => {
@@ -92,10 +99,6 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
       if (result) refetch();
     });
   }
-
-  useEffect(() => {
-    fetchData();
-  }, [selectedDevice]);
 
   useEffect(() => {
     setStatMatrix({});
