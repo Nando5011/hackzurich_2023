@@ -36,19 +36,23 @@ class WindowLogger:
 
     the report since the last report can be accessed via getActiveWindowHistory()
     """
-    
+
     def __init__(self, interval: datetime.timedelta):
         self.activeWindowHistory = []
         self.activeWindowHistoryCompacted = []
         self.interval = interval
 
     def __logActiveWindowName(self):
-        pid = get_pid_of_active_window()
-        if len(pid) == 0:
-            return
-        pid = pid[0]
-        process = psutil.Process(int(pid))
-        processName = process.exe()
+        if sys.platform == "darwin":
+            pid = get_pid_of_active_window()
+            if len(pid) == 0:
+                return
+            pid = pid[0]
+            process = psutil.Process(int(pid))
+            processName = process.exe()
+        # check if windows
+        if sys.platform == "win32" or sys.platform == "cygwin" or sys.platform == "msys":
+            processName = gw.getActiveWindowTitle()
         self.activeWindowHistory.append((processName, datetime.datetime.now()))
 
         # log to compacted history
@@ -60,7 +64,7 @@ class WindowLogger:
                 self.activeWindowHistoryCompacted[-1] = (processName, lastEntry[1] + self.interval)
             else:
                 self.activeWindowHistoryCompacted.append((processName, datetime.datetime.now()))
-            
+
 
 
     async def __run(self):
@@ -73,10 +77,10 @@ class WindowLogger:
 
     def getActiveWindowHistory(self):
         return self.activeWindowHistory
-    
+
     def getActiveWindowHistoryCompacted(self):
         return self.activeWindowHistoryCompacted
-    
+
     def getTimePerWindow(self):
         timePerWindow = {}
         for entry in self.activeWindowHistory:
