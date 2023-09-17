@@ -5,7 +5,7 @@ const DayTimeline = ({ day, statRecObject }) => {
     <div className="timeline-item">
       <div className="timeline-item-date">{day}</div>
       <div className="timeline-item-content">
-        {statRecObject.map((val, index) => (
+        {statRecObject["timestamps"].map((val, index) => (
           <React.Fragment key={index}>
             <div className="timeline-item-time">
               {val.timestamp}

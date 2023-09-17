@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Page, Block, f7, Toolbar } from "framework7-react";
+import {
+  Page,
+  Block,
+  f7,
+  Toolbar,
+  Fab,
+  FabButton,
+  FabButtons,
+  Icon,
+} from "framework7-react";
 
 import { User, signOut } from "firebase/auth";
 import { auth } from "../js/firebase";
@@ -10,6 +19,7 @@ import NavbarComponent from "../components/navbar/navbar";
 const HomePage = () => {
   const [loginScreenOpened, setLoginScreenOpened] = useState(false);
   const [currentUser, setCurrentUser] = useState<null | User>(null);
+  const [doRefetch, setDoRefetch] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -23,6 +33,10 @@ const HomePage = () => {
       unsubscribe();
     };
   }, [auth]);
+
+  const refetch = () => {
+    setDoRefetch(false);
+  };
 
   const signOutUser = () => {
     signOut(auth).then(() => window.location.reload());
@@ -44,7 +58,22 @@ const HomePage = () => {
           </p>
         </Toolbar>
       )}
-      {currentUser && <StatisticView currentUser={currentUser} />}
+      {currentUser && !doRefetch && (
+        <Fab
+          position="right-bottom"
+          slot="fixed"
+          onClick={() => setDoRefetch(true)}
+        >
+          <Icon f7="goforward" />
+        </Fab>
+      )}
+      {currentUser && (
+        <StatisticView
+          currentUser={currentUser}
+          refetch={refetch}
+          doRefetch={doRefetch}
+        />
+      )}
 
       {loginScreenOpened && (
         <Login closeLoginScreen={() => setLoginScreenOpened(false)} />
