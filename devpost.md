@@ -9,11 +9,17 @@ Additionally, we aimed to address another common workplace challenge: time track
 
 The project is structured into several components:
 
-#### Asynchronous Logger
+#### 1. Asynchronous Logger
 We developed an asynchronous logger for various types of user interactions. This logger is implemented using the Python library, pynput, which allows us to capture key and mouse events. 
 
-#### Custom Application Logger
+#### 2. Custom Application Logger
 In addition to key and mouse logging, we implemented a custom application logger. This logger detects which application is currently in focus. Implementing this component for multiple operating systems presented a challenge, as the method for determining the currently focused application differs across platforms.
+
+#### 3. Data Storage
+The Metrics extracted are stored in a firebase database. This allows us to easily access the data from anywhere and perform further analysis.
+
+#### 4. Web App
+The web app is built using React and Material UI. It allows users to view their productivity metrics and receive suggestions for breaks. The web app is hosted on Firebase.
 
 ### Challenges we ran into
 The decision to avoid vendor lock-in led us to create a custom solution for key, mouse, and application logging. While this allowed us to use the data precisely as needed, it presented technical challenges. Ensuring compatibility with major operating systems was a complex task. The key and mouse logger benefited from the abstraction provided by the pynput library, but the application logger required platform-specific solutions.

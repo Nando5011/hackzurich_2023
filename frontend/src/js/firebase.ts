@@ -8,15 +8,14 @@ import { getFirestore } from "firebase/firestore";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCvtLA9rTf6Nc74ZKyeGP1QXFl0svma30w",
-  authDomain: "hackzurich2023-502ac.firebaseapp.com",
-  databaseURL:
-    "https://hackzurich2023-502ac-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "hackzurich2023-502ac",
-  storageBucket: "hackzurich2023-502ac.appspot.com",
-  messagingSenderId: "659583248270",
-  appId: "1:659583248270:web:1e4903e77a7ae0c20da6df",
+  apiKey: "AIzaSyBDZwq8by5PIZJWC_HOfWemvrMNSxXvaII",
+  authDomain: "hackzurich2023-2.firebaseapp.com",
+  projectId: "hackzurich2023-2",
+  storageBucket: "hackzurich2023-2.appspot.com",
+  messagingSenderId: "146233828909",
+  appId: "1:146233828909:web:df21d91a27afd09087baa4"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

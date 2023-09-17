@@ -1,8 +1,11 @@
 import threading
 import time
+<<<<<<< HEAD
 import math
 from .keylogger import KeyLogger
 from .mouselogger import MouseLogger
+=======
+>>>>>>> 0ad6cedf18092bfe285d0c312f86c6e367baf008
 
 WPM_THRESHOLD = 30
 CPM_THRESHOLD = 150
@@ -22,7 +25,7 @@ class Analyzer:
         self.keylogger = KeyLogger(shortTimeHistoryTimeSpan)
         self.mouselogger = MouseLogger()
         self.REFRESH_TIME = refreshTime
-        self.workflowRating = 50
+        self.workflowRatings = []
         self.latestKeyboardActivity = []
         self.latestMouseActivity = []
         self.__run()
@@ -36,7 +39,9 @@ class Analyzer:
         while(True):
             startTime = time.time()
             self.__updateLatestActivity()
-            self.__checkForThresholds()
+            self.__updateWorkflowRating()
+            if(len(self.workflowRatings) == 6):
+                self.__checkForThresholds()
             endTime = time.time()
             runTime = endTime - startTime
             # If runTime is bigger than refresh time, dont wait
@@ -46,21 +51,19 @@ class Analyzer:
 
     # These functions will get executed independently on their events
     # TODO implement these based on the statistics, these can be blocking as they are executed independently
-    def __onWPMThresholdExceeded(self):
-        print("WARNING: WPM is below threshold!")
+    def __onAFKStatus(self):
+        print("AFK")
         time.sleep(10)
-    def __onCPMThresholdExceeded(self):
-        print("WARNING: CPM is below threshold!")
-        time.sleep(10)
-    def __onSpeedThresholdExceeded(self):
-        print("WARNING: Speed variation above threshold!")
-    def __onABUThresholdExceeded(self):
-        print("WARNING: ABU is above threshold!")
-    def __onRBUThresholdExceeded(self):
-        print("WARNING: RBU is above threshold!")
+    def __onSuggestBreak(self):
+        print("TO A BREAK")
+    def __onEnterFocusMode(self):
+        print("FOCUS MODE ON")
+    def __onNotifyWorkflowRating(self):
+        print("NOTIFYING FIREBASE")
     def __printStatus(self):
-        print(self.__getLatestValues())
-        print(self.workflowRating)
+        # print(self.__getLatestValues())
+        # print(self.workflowRatings)
+        print("Average workflowRating: " + str(sum(self.workflowRatings) / len(self.workflowRatings)))
 
     def __getLatestCPM(self):
         cpm = len(self.latestKeyboardActivity) / (self.REFRESH_TIME / 60)
@@ -165,7 +168,6 @@ class Analyzer:
         mouseActive = True if (avgMouseSpeed > 0) else False
         avgMouseSpeed = self.__setToBoundaries(avgMouseSpeed, MOUSESPEED_BOT, MOUSESPEED_TOP)
 
-
         wpmRating = (wordsPerMinute-WPM_BOT) / (WPM_TOP-WPM_BOT)
 
         # If rbu > than avg -> rating 0...0.5
@@ -190,14 +192,35 @@ class Analyzer:
         else:
             mouseSpeedPoints = 0
 
-        self.workflowRating = averageWorkFlowRating + wpmPoints + rbuPoints + mouseSpeedPoints
-        self.workflowRating = self.__setToBoundaries(self.workflowRating, 0, 100)
+        if((wordsPerMinuteValid == False) and (relativeBackSpaceUsageValid == False) and (mouseActive == False)):
+            workflowRating = 0
+        else:
+            workflowRating = averageWorkFlowRating + wpmPoints + rbuPoints + mouseSpeedPoints
+            workflowRating = self.__setToBoundaries(workflowRating, 0, 100)
+
+        while(len(self.workflowRatings) >= 6):
+            self.workflowRatings.pop(0)
+        self.workflowRatings.append(workflowRating)
 
     def __checkForThresholds(self):
-        values = self.__getLatestValues()
-        self.__updateWorkflowRating()
-        # if(workflowRating > ...)
-        #   doSth()
+        if(len(self.workflowRatings) != 0):
+            averageWorkflowRating = sum(self.workflowRatings) / len(self.workflowRatings)
+        else:
+            averageWorkflowRating = 0
+
+        if(averageWorkflowRating < 5):
+            onAFKThread = threading.Thread(target=self.__onAFKStatus, args=(), kwargs={})
+            onAFKThread.start()
+        elif(averageWorkflowRating < 40):
+            suggestBreakThread = threading.Thread(target=self.__onSuggestBreak, args=(), kwargs={})
+            suggestBreakThread.start()
+        elif(averageWorkflowRating > 65):
+            enterFocusModeThread = threading.Thread(target=self.__onEnterFocusMode, args=(), kwargs={})
+            enterFocusModeThread.start()
+
+        # Send data to firebase
+        notifyWorkflowRatingThread = threading.Thread(target=self.__onNotifyWorkflowRating, args=(), kwargs={})
+        notifyWorkflowRatingThread.start()
 
         statusThread = threading.Thread(target=self.__printStatus, args=(), kwargs={})
         statusThread.start()

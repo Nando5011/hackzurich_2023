@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Tooltip, Legend, Cell } from "recharts";
-import { Block } from "framework7-react";
+import { Block, BlockTitle } from "framework7-react";
 import store from "../../js/store";
 
 const TaskTypeDistributionGraph = () => {
@@ -46,17 +46,20 @@ const TaskTypeDistributionGraph = () => {
   }));
 
   return (
-    <Block>
-      <PieChart width={windowSize.width * 0.8} height={windowSize.height * 0.55} style={{ margin: "auto" }}>
-        <Pie data={dataForGraph} labelLine={false} fill="#8884d8" dataKey="value">
-          {dataForGraph.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={getColorByIndex(index)} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
-    </Block>
+    <>
+      <BlockTitle>Distribution of task types</BlockTitle>
+      <Block>
+        <PieChart width={windowSize.width * 0.8} height={windowSize.height * 0.55} style={{ margin: "auto" }}>
+          <Pie data={dataForGraph} labelLine={false} fill="#8884d8" dataKey="value">
+            {dataForGraph.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={getColorByIndex(index)} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </Block>
+    </>
   );
 };
 

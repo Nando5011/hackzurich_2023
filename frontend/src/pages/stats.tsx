@@ -2,6 +2,7 @@ import React from "react";
 import TimeSeriesGraph from "../components/plots/TimeSeriesGraph";
 import TaskTypeDistributionGraph from "../components/plots/TaskTypeDistributionGraph";
 import { BlockTitle, Link, NavRight, NavTitle, Navbar } from "framework7-react";
+import WorkflowRatingGraph from "../components/plots/WorkflowRating";
 
 const StatsPage = () => {
   return (
@@ -13,7 +14,8 @@ const StatsPage = () => {
         </NavRight>
       </Navbar>
       <div className="page-content">
-        <BlockTitle>Statistics</BlockTitle>
+        <BlockTitle style={{ fontSize: 20 }}>Statistics</BlockTitle>
+        <WorkflowRatingGraph />
         <TaskTypeDistributionGraph />
         <TimeSeriesGraph />
       </div>
