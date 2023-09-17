@@ -22,6 +22,7 @@ class Analyzer:
         self.keylogger = KeyLogger(shortTimeHistoryTimeSpan)
         self.mouselogger = MouseLogger()
         self.REFRESH_TIME = refreshTime
+        self.workflowRating = 50
         self.latestKeyboardActivity = []
         self.latestMouseActivity = []
         self.__run()
@@ -59,6 +60,7 @@ class Analyzer:
         print("WARNING: RBU is above threshold!")
     def __printStatus(self):
         print(self.__getLatestValues())
+        print(self.workflowRating)
 
     def __getLatestCPM(self):
         cpm = len(self.latestKeyboardActivity) / (self.REFRESH_TIME / 60)
@@ -130,24 +132,72 @@ class Analyzer:
             "mouseActive": True if (self.__getLatestAvgMouseSpeed() > 0) else False
         }
 
+    def __setToBoundaries(self, value, valueMin, valueMax):
+        if(value < valueMin):
+            value = valueMin
+        if(value > valueMax):
+            value = valueMax
+        return value
+
+    def __updateWorkflowRating(self):
+        WPM_BOT = 20
+        WPM_AVG = 70
+        WPM_TOP = 120
+        WPM_WEIGHT = 40
+
+        RBU_BOT = 1.00
+        RBU_AVG = 0.08
+        RBU_TOP = 0.00
+        RBU_WEIGHT = 20
+
+        MOUSESPEED_BOT = 50
+        MOUSESPEED_AVG = 200
+        MOUSESPEED_TOP = 350
+        MOUSESPEED_WEIGHT = 30
+
+        averageWorkFlowRating = 50
+        wordsPerMinute = self.__getLatestWPM()
+        wordsPerMinuteValid = True if (wordsPerMinute > 0) else False
+        relativeBackSpaceUsageValid = True if (wordsPerMinute > 0) else False
+        wordsPerMinute = self.__setToBoundaries(self.__getLatestWPM(), WPM_BOT, WPM_TOP)
+        relativeBackSpaceUsage =  self.__setToBoundaries(self.__getLatestRBU(), RBU_BOT, RBU_TOP)
+        avgMouseSpeed = self.__getLatestAvgMouseSpeed()
+        mouseActive = True if (avgMouseSpeed > 0) else False
+        avgMouseSpeed = self.__setToBoundaries(avgMouseSpeed, MOUSESPEED_BOT, MOUSESPEED_TOP)
+
+
+        wpmRating = (wordsPerMinute-WPM_BOT) / (WPM_TOP-WPM_BOT)
+
+        # If rbu > than avg -> rating 0...0.5
+        if(relativeBackSpaceUsage > RBU_AVG):
+            rbuRating = relativeBackSpaceUsage / 1.84
+        # If rbu <= than avg -> rating 0.5...1
+        else:
+            rbuRating = 1 - (relativeBackSpaceUsage / 0.016)
+
+        mouseSpeedRating = (avgMouseSpeed-MOUSESPEED_BOT) / (MOUSESPEED_TOP-MOUSESPEED_BOT)
+
+        if(wordsPerMinuteValid == True):
+            wpmPoints = (wpmRating * WPM_WEIGHT) - (WPM_WEIGHT/2)
+        else:
+            wpmPoints = 0
+        if(relativeBackSpaceUsageValid == True):
+            rbuPoints = (rbuRating * RBU_WEIGHT) - (RBU_WEIGHT/2)
+        else:
+            rbuPoints = 0
+        if(mouseActive == True):
+            mouseSpeedPoints = (mouseSpeedRating * MOUSESPEED_WEIGHT) - (MOUSESPEED_WEIGHT/2)
+        else:
+            mouseSpeedPoints = 0
+
+        self.workflowRating = averageWorkFlowRating + wpmPoints + rbuPoints + mouseSpeedPoints
+        self.workflowRating = self.__setToBoundaries(self.workflowRating, 0, 100)
+
     def __checkForThresholds(self):
         values = self.__getLatestValues()
-        if values["WPM"] < WPM_THRESHOLD:
-            onWPMThresholdExceededThread = threading.Thread(target=self.__onWPMThresholdExceeded, args=(), kwargs={})
-            onWPMThresholdExceededThread.start()
-        if values["CPM"] < CPM_THRESHOLD:
-            onCPMThresholdExceededThread = threading.Thread(target=self.__onCPMThresholdExceeded, args=(), kwargs={})
-            onCPMThresholdExceededThread.start()
-        if values["SpeedVariation"] > SPEED_VARIATION_THRESHOLD:
-            onSpeedThresholdExceededThread = threading.Thread(target=self.__onSpeedThresholdExceeded, args=(), kwargs={})
-            onSpeedThresholdExceededThread.start()
-        if values["ABU"] > ABU_THRESHOLD:
-            onABUThresholdExceededThread = threading.Thread(target=self.__onABUThresholdExceeded, args=(), kwargs={})
-            onABUThresholdExceededThread.start()
-        if values["RBU"] > RBU_THRESHOLD:
-            onRBUThresholdExceededThread = threading.Thread(target=self.__onRBUThresholdExceeded, args=(), kwargs={})
-            onRBUThresholdExceededThread.start()
-        # if values["avgMouseSpeed"] > 100:
-            # toSth()
+        self.__updateWorkflowRating()
+        # if(workflowRating > ...)
+        #   doSth()
+
         statusThread = threading.Thread(target=self.__printStatus, args=(), kwargs={})
         statusThread.start()
