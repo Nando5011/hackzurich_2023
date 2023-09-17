@@ -1,11 +1,8 @@
 import threading
 import time
-<<<<<<< HEAD
 import math
 from .keylogger import KeyLogger
 from .mouselogger import MouseLogger
-=======
->>>>>>> 0ad6cedf18092bfe285d0c312f86c6e367baf008
 
 WPM_THRESHOLD = 30
 CPM_THRESHOLD = 150
