@@ -1,4 +1,0 @@
-pynput
-pyautogui
-pygetwindow
-psutil

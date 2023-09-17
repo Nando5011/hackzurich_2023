@@ -3,3 +3,7 @@ PyQRCode==1.2.1
 pystray==0.19.3
 pywebview==4.3.3
 pebble
+pynput
+pyautogui
+pygetwindow
+psutil
