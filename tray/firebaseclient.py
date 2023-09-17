@@ -39,7 +39,7 @@ class FirebaseClient:
             print()
 
     def send_windowlogger_data_to_firestore(self, key, time_spent)-> None:
-        print("FBC --> "+key +" " + time_spent)
+        print("FBC --> "+key +" " + str(time_spent))
         
         application = key.split(os.path.sep)
         
@@ -50,11 +50,11 @@ class FirebaseClient:
         data = {
             "task": key,
             "taskType": "productive",
-            "timeOpen": time_spent
+            "timeOpen": time_spent.isoformat()
         }
 
         date_path = "users/test1234@gmail.com/devices/deviceID1/records/"+date.today().strftime('%Y-%m-%d')
-        document_path = "users/test1234@gmail.com/devices/deviceID1/records/"+date.today().strftime('%Y-%m-%d')+"/timestamps/"+ datetime.now().strftime('%H:%M')
+        document_path = "users/test1234@gmail.com/devices/deviceID1/records/"+date.today().strftime('%Y-%m-%d')+"/timestamps/"+ time_spent.strftime('%H:%M:%S')
         
         self.db.document(date_path).set(date_data, merge=True)
         self.db.document(document_path).set(data, merge=True)
