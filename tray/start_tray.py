@@ -57,7 +57,7 @@ class Tray:
         self.icon = pystray.Icon("Bitwise", self.image, menu=self.menu)
 
         self.uuid = self.generate_uuid()
-        self.generate_qrcode("https://hackzurich23-8212.web.app")
+        self.generate_qrcode("https://hackzurich2023-2.web.app/")
 
     def calculate_position_of_tray_view(self, dimensions) -> (int, int):
         for m in get_monitors():
@@ -103,13 +103,13 @@ class Tray:
     def open_qrcode_window(self):
         self.qrcode_window = webview.create_window(
             'QRCODE',
-            'qrcode.html',
+            os.path.join(os.getcwd(), 'tray', 'qrcode.html'),
             on_top=True,
             resizable=False,
             frameless=True,
             draggable=False,
             width=250,
-            height=330,
+            height=430,
             y=0,
             x=self.calculate_position_of_tray_view((250, 320))[0],
             js_api=self.jsapi
@@ -124,7 +124,7 @@ class Tray:
     def open_meditation_window(self):
         self.meditation_window = webview.create_window(
             'MEDITATION-QUESTION',
-            'meditation_question.html',
+            os.path.join(os.getcwd(), 'tray', 'meditation_question.html'),
             on_top=True,
             resizable=False,
             frameless=True,
@@ -153,9 +153,9 @@ class Tray:
         self.open_window = None
         self.qrcode_window.hide()
 
-    def run(self) -> None:
+    def start(self) -> None:
         self.icon.run()
         
 if __name__ == '__main__':
     tray = Tray()
-    tray.run()
+    tray.start()
