@@ -19,10 +19,8 @@ if sys.platform == "darwin":
     front_window_info = NSWorkspace.sharedWorkspace().frontmostApplication()
     pid = front_window_info.processIdentifier()
     print("pi: " + str(pid))
-
 elif sys.platform == "win32" or sys.platform == "cygwin" or sys.platform == "msys":
-    active_window = gw.getActiveWindow()
-    pid = active_window.processId
+    pid = gw.getActiveWindow().pid
 
 else:
     raise Exception("Platform not supported")
