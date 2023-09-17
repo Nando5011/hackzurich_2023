@@ -59,7 +59,7 @@ In order to use BreakWise you only need to install the logging software on your 
 
 3. Install requirements
   ```sh
-  pip install -r SWA/requirements.txt
+  pip install -r requirements.txt
   ```
 
 4. Run the app
@@ -79,7 +79,7 @@ In order to use BreakWise you only need to install the logging software on your 
   ```
 3. Install requirements
   ```sh
-  pip install -r SWA/requirements.txt
+  pip install -r requirements.txt
   ```
 
 4. Run the app
