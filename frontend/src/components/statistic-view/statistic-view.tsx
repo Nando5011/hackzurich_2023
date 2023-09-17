@@ -15,39 +15,19 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
   const [selectedDevice, setSelectedDevice] = useState("x");
   const devicesRef = "users/" + user.email + "/devices";
 
-  const [value, loading, error] = useCollection(
-    collection(firestore, devicesRef)
-  );
+  const [value, loading, error] = useCollection(collection(firestore, devicesRef));
 
   const fetchData = (callback?) => {
     const matrix = {};
-    const qRecords = query(
-      collection(firestore, devicesRef + "/" + selectedDevice + "/records")
-    );
+    const qRecords = query(collection(firestore, devicesRef + "/" + selectedDevice + "/records"));
     getDocs(qRecords).then((qS) => {
       qS.forEach((doc) => {
         const qTimestamps = query(
-          collection(
-            firestore,
-            devicesRef +
-              "/" +
-              selectedDevice +
-              "/records/" +
-              doc.id +
-              "/timestamps"
-          )
+          collection(firestore, devicesRef + "/" + selectedDevice + "/records/" + doc.id + "/timestamps")
         );
 
         const qWorkflowRatings = query(
-          collection(
-            firestore,
-            devicesRef +
-              "/" +
-              selectedDevice +
-              "/records/" +
-              doc.id +
-              "/workflowRatings"
-          )
+          collection(firestore, devicesRef + "/" + selectedDevice + "/records/" + doc.id + "/workflowRatings")
         );
         getDocs(qTimestamps)
           .then((qS2) => {
@@ -59,27 +39,18 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
               if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
                 matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
               }
-              if (
-                !matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]
-              ) {
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                  dateSplit[2] + ""
-                ] = [];
+              if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]) {
+                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""] = [];
               }
-              if (
-                !matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""][
-                  "timestamps"
-                ]
-              ) {
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                  dateSplit[2] + ""
-                ]["timestamps"] = [];
+              if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]["timestamps"]) {
+                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"] = [];
               }
 
               // Push doc3.data() into the array
-              matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                dateSplit[2] + ""
-              ]["timestamps"].push({ ...doc3.data(), timestamp: doc3.id });
+              matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"].push({
+                ...doc3.data(),
+                timestamp: doc3.id,
+              });
             });
           })
           .then(() => {
@@ -93,29 +64,15 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
                   if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
                     matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
                   }
-                  if (
-                    !matrix[dateSplit[0]][months[dateSplit[1]]][
-                      dateSplit[2] + ""
-                    ]
-                  ) {
-                    matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                      dateSplit[2] + ""
-                    ] = [];
+                  if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]) {
+                    matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""] = [];
                   }
-                  if (
-                    !matrix[dateSplit[0]][months[dateSplit[1]]][
-                      dateSplit[2] + ""
-                    ]["workflowRatings"]
-                  ) {
-                    matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                      dateSplit[2] + ""
-                    ]["workflowRatings"] = [];
+                  if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]["workflowRatings"]) {
+                    matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["workflowRatings"] = [];
                   }
 
                   // Push doc4.data() into the array
-                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                    dateSplit[2] + ""
-                  ]["workflowRatings"].push({
+                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["workflowRatings"].push({
                     ...doc4.data(),
                     timestamp: doc4.id,
                   });
@@ -124,7 +81,6 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
               .then(() => {
                 store.dispatch("setStatsMatrix", matrix);
                 setStatMatrix({ ...(matrix as StatRecord) });
-                console.log(matrix);
                 if (callback != null) callback(true);
               });
           });
@@ -165,16 +121,9 @@ const StatisticView = ({ currentUser, refetch, doRefetch }) => {
             ))}
         </ListInput>
       </List>
-      <div
-        className="timeline timeline-horizontal timeline-cols-2 medium-timeline-cols-3"
-        style={{ overflow: "auto" }}
-      >
+      <div className="timeline timeline-horizontal timeline-cols-1 medium-timeline-cols-3" style={{ overflow: "auto" }}>
         {Object.keys(statMatrix).map((year) => (
-          <YearTimeline
-            key={year}
-            year={year}
-            statRecObject={statMatrix[year]}
-          />
+          <YearTimeline key={year} year={year} statRecObject={statMatrix[year]} />
         ))}
       </div>
     </Block>

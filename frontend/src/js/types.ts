@@ -4,7 +4,7 @@ export interface Stat {
 }
 
 export type StatRecord = {
-  number: [MonthObject];
+  year: [MonthObject];
 };
 
 interface MonthObject {

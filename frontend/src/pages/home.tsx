@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Page,
-  Block,
-  f7,
-  Toolbar,
-  Fab,
-  FabButton,
-  FabButtons,
-  Icon,
-} from "framework7-react";
+import { Page, Toolbar, Fab, Icon } from "framework7-react";
 
 import { User, signOut } from "firebase/auth";
 import { auth } from "../js/firebase";
@@ -59,25 +50,13 @@ const HomePage = () => {
         </Toolbar>
       )}
       {currentUser && !doRefetch && (
-        <Fab
-          position="right-bottom"
-          slot="fixed"
-          onClick={() => setDoRefetch(true)}
-        >
+        <Fab position="right-bottom" slot="fixed" onClick={() => setDoRefetch(true)}>
           <Icon f7="goforward" />
         </Fab>
       )}
-      {currentUser && (
-        <StatisticView
-          currentUser={currentUser}
-          refetch={refetch}
-          doRefetch={doRefetch}
-        />
-      )}
+      {currentUser && <StatisticView currentUser={currentUser} refetch={refetch} doRefetch={doRefetch} />}
 
-      {loginScreenOpened && (
-        <Login closeLoginScreen={() => setLoginScreenOpened(false)} />
-      )}
+      {loginScreenOpened && <Login closeLoginScreen={() => setLoginScreenOpened(false)} />}
     </Page>
   );
 };
