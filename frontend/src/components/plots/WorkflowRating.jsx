@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { Block, BlockTitle } from "framework7-react";
 import store from "../../js/store";
 
-const TimeSeriesGraph = () => {
+const WorkflowRatingGraph = () => {
   const [statMatrix, setStatMatrix] = useState({});
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -31,17 +31,15 @@ const TimeSeriesGraph = () => {
   Object.keys(statMatrix).forEach((year) => {
     Object.keys(statMatrix[year]).forEach((month) => {
       Object.keys(statMatrix[year][month]).forEach((day) => {
-        const dayRecord = statMatrix[year][month][day]["timestamps"];
-        const taskCount = dayRecord.reduce((sum, record) => sum + 1, 0);
-        const dateString = `${day}/${month.slice(0, 3)}/${year}`;
-        const existingDayData = dataForGraph.find((data) => data.name === dateString);
-
-        if (existingDayData) {
-          existingDayData.taskCount += taskCount;
-        } else {
-          dataForGraph.push({
-            name: dateString,
-            taskCount,
+        const dayRecord = statMatrix[year][month][day]["workflowRatings"];
+        if (dayRecord) {
+          dayRecord.forEach((record) => {
+            if (record.rating !== undefined && record.timestamp !== undefined) {
+              dataForGraph.push({
+                timestamp: `${day}/${month.slice(0, 3)}/${year} ${record.timestamp}`,
+                rating: record.rating,
+              });
+            }
           });
         }
       });
@@ -50,7 +48,7 @@ const TimeSeriesGraph = () => {
 
   return (
     <>
-      <BlockTitle>Total tasks per day</BlockTitle>
+      <BlockTitle>Workflow Rating</BlockTitle>
       <Block>
         <LineChart
           width={windowSize.width * 0.8}
@@ -65,15 +63,15 @@ const TimeSeriesGraph = () => {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis dataKey="timestamp" />
+          <YAxis dataKey="rating" />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="taskCount" stroke="#8884d8" activeDot={{ r: 12 }} strokeWidth={10} />
+          <Line type="monotone" dataKey="rating" stroke="#8884d8" activeDot={{ r: 12 }} strokeWidth={10} />
         </LineChart>
       </Block>
     </>
   );
 };
 
-export default TimeSeriesGraph;
+export default WorkflowRatingGraph;
