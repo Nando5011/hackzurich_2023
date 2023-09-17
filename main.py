@@ -1,5 +1,6 @@
 from tray.firebaseclient import FirebaseClient
 from SWA.windowlogger import WindowLogger
+from tray.start_tray import Tray
 import datetime
 import time
 import threading
@@ -9,6 +10,7 @@ import threading
 if __name__ == '__main__':
 
     fb = FirebaseClient()
+    
     
     windowLogger = WindowLogger(datetime.timedelta(seconds=1))
     thread = threading.Thread(target=windowLogger.start)
