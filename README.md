@@ -18,14 +18,14 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-By analyzing keylogger data, we can detect how productive a user is at any given time. Based on this data we can suggest breaks to the user, which will help them to stay productive troughout the day. 
+By analyzing keylogger data, we can detect how productive a user is at any given time. Based on this data we can suggest breaks to the user, which will help them to stay productive throughout the day. 
 
-Additionaly we can detect how much time any appliocation is used and therefore simplify the task of time tracking.
+Additionally, we can detect how much time any application is used and therefore simplify the task of time tracking.
 
-In order to protect the users privacy, all the keylogger data is stored locally on the users device and is only used to extract metrics about the users state of productivity. The only data that is sent to servers is the resulting metrics.
+In order to protect the users' privacy, all the keylogger data is stored locally on the users' devices and is only used to extract metrics about the users' state of productivity. The only data that is sent to servers is the resulting metrics.
 
 ### Built With
-BreakWise can be split in two parts: The Software on the users working device and the webapp, which is used to display the metrics. 
+BreakWise can be split into two parts: The Software on the user's working device and the web app, which is used to display the metrics. 
 
 #### Backend
 [![Python3][python.org]][python-url]
@@ -38,12 +38,12 @@ The logging software is written in python3 using [pynput](https://pypi.org/proje
 [![Vite][vitejs.dev]][vite-url]
 [![Firebase][firebase.google.com]][firebase-url]
 
-The webapp is written in [React.js](https://reactjs.org/) using [Framework7](https://framework7.io/) and [Vite](https://vitejs.dev/). The data is stored in a [Firebase](https://firebase.google.com/) database.
+The web app is written in [React.js](https://reactjs.org/) using [Framework7](https://framework7.io/) and [Vite](https://vitejs.dev/). The data is stored in a [Firebase](https://firebase.google.com/) database.
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-In order to use BreakWise you only need to install the logging software on your device and create an account on the webapp.
+In order to use BreakWise you only need to install the logging software on your device and create an account on the web app.
 
 ### Unix
 
@@ -87,6 +87,31 @@ In order to use BreakWise you only need to install the logging software on your 
   python3 main.py
   ```
 
+### BreakWise WebApp
+1. cd into the frontend folder and npm install
+  ```sh
+  cd frontend && npm install
+  ```
+
+2. Start up locally or
+  ```sh
+  npm start
+  ```
+
+3. Build for android
+  ```sh
+  npm run build-capacitor-android
+  ```
+
+4. and start app in android (device can be selected in terminal) or
+  ```sh
+  npx cap run android
+  ```
+
+5. If error messages comes saying that android is not setup up, run the following:
+  ```sh
+  npx cap add android
+  ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
