@@ -11,6 +11,7 @@ const TaskTypeDistributionGraph = () => {
   });
 
   useEffect(() => {
+    console.log(store.getters.stats.value);
     setStatMatrix(store.getters.stats.value);
   }, []);
 
@@ -31,7 +32,7 @@ const TaskTypeDistributionGraph = () => {
   Object.keys(statMatrix).forEach((year) => {
     Object.keys(statMatrix[year]).forEach((month) => {
       Object.keys(statMatrix[year][month]).forEach((day) => {
-        statMatrix[year][month][day].forEach((task) => {
+        statMatrix[year][month][day]["timestamps"].forEach((task) => {
           if (!taskTypeCounts[task.taskType]) taskTypeCounts[task.taskType] = 0;
           taskTypeCounts[task.taskType]++;
         });
@@ -46,17 +47,8 @@ const TaskTypeDistributionGraph = () => {
 
   return (
     <Block>
-      <PieChart
-        width={windowSize.width * 0.8}
-        height={windowSize.height * 0.55}
-        style={{ margin: "auto" }}
-      >
-        <Pie
-          data={dataForGraph}
-          labelLine={false}
-          fill="#8884d8"
-          dataKey="value"
-        >
+      <PieChart width={windowSize.width * 0.8} height={windowSize.height * 0.55} style={{ margin: "auto" }}>
+        <Pie data={dataForGraph} labelLine={false} fill="#8884d8" dataKey="value">
           {dataForGraph.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={getColorByIndex(index)} />
           ))}

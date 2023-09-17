@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from "recharts";
-import {
-  Block,
-  BlockTitle,
-} from "framework7-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { Block, BlockTitle } from "framework7-react";
 import store from "../../js/store";
 
 const TimeSeriesGraph = () => {
@@ -31,22 +19,21 @@ const TimeSeriesGraph = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
-
 
   const dataForGraph = [];
 
   Object.keys(statMatrix).forEach((year) => {
     Object.keys(statMatrix[year]).forEach((month) => {
       Object.keys(statMatrix[year][month]).forEach((day) => {
-        const dayRecord = statMatrix[year][month][day];
+        const dayRecord = statMatrix[year][month][day]["timestamps"];
         const taskCount = dayRecord.reduce((sum, record) => sum + 1, 0);
-        const dateString = `${day}/${month.slice(0,3)}/${year}`;
+        const dateString = `${day}/${month.slice(0, 3)}/${year}`;
         const existingDayData = dataForGraph.find((data) => data.name === dateString);
 
         if (existingDayData) {
@@ -61,11 +48,10 @@ const TimeSeriesGraph = () => {
     });
   });
 
-
   return (
     <Block>
       <LineChart
-        width={windowSize.width * 0.80}
+        width={windowSize.width * 0.8}
         height={windowSize.height * 0.75}
         style={{ margin: "auto" }}
         data={dataForGraph}
@@ -81,9 +67,9 @@ const TimeSeriesGraph = () => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="taskCount" stroke="#8884d8"  activeDot={{ r: 12}} strokeWidth={10} />
+        <Line type="monotone" dataKey="taskCount" stroke="#8884d8" activeDot={{ r: 12 }} strokeWidth={10} />
       </LineChart>
-    </Block >
+    </Block>
   );
 };
 

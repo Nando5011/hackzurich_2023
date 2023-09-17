@@ -4,19 +4,28 @@ export interface Stat {
 }
 
 export type StatRecord = {
-  number: [MonthObject];
+  year: [MonthObject];
 };
 
 interface MonthObject {
   month: [DateObject];
 }
 interface DateObject {
-  date: [Log];
+  date: Log;
 }
 
 interface Log {
-  task: string;
-  taskType: string;
+  timestamps: [
+    {
+      task: string;
+      taskType: string;
+    }
+  ];
+  workflowRatings: [
+    {
+      rating: number;
+    }
+  ];
 }
 
 export const months = {

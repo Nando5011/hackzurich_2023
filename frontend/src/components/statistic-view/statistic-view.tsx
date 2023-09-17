@@ -8,39 +8,26 @@ import { collection, getDocs, query } from "firebase/firestore";
 import { StatRecord, months } from "../../js/types";
 import YearTimeline from "../timeline/year";
 import store from "../../js/store";
-const StatisticView = ({ currentUser }) => {
-  const [user, setCurrentUser] = useState<User>(currentUser);
+
+const StatisticView = ({ currentUser, refetch, doRefetch }) => {
+  const [user] = useState<User>(currentUser);
   const [statMatrix, setStatMatrix] = useState({});
   const [selectedDevice, setSelectedDevice] = useState("x");
-  const [devicesRef, setDevicesRef] = useState(
-    "users/" + user.email + "/devices"
-  );
+  const devicesRef = "users/" + user.email + "/devices";
 
-  const [value, loading, error] = useCollection(
-    collection(firestore, devicesRef)
-  );
+  const [value, loading, error] = useCollection(collection(firestore, devicesRef));
 
-  useEffect(() => {
-    fetchData();
-  }, [selectedDevice]);
-
-  const fetchData = () => {
+  const fetchData = (callback?) => {
     const matrix = {};
-    const qRecords = query(
-      collection(firestore, devicesRef + "/" + selectedDevice + "/records")
-    );
+    const qRecords = query(collection(firestore, devicesRef + "/" + selectedDevice + "/records"));
     getDocs(qRecords).then((qS) => {
       qS.forEach((doc) => {
         const qTimestamps = query(
-          collection(
-            firestore,
-            devicesRef +
-              "/" +
-              selectedDevice +
-              "/records/" +
-              doc.id +
-              "/timestamps"
-          )
+          collection(firestore, devicesRef + "/" + selectedDevice + "/records/" + doc.id + "/timestamps")
+        );
+
+        const qWorkflowRatings = query(
+          collection(firestore, devicesRef + "/" + selectedDevice + "/records/" + doc.id + "/workflowRatings")
         );
         getDocs(qTimestamps)
           .then((qS2) => {
@@ -52,70 +39,63 @@ const StatisticView = ({ currentUser }) => {
               if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
                 matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
               }
-              if (
-                !matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]
-              ) {
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                  dateSplit[2] + ""
-                ] = [];
+              if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]) {
+                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""] = [];
+              }
+              if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]["timestamps"]) {
+                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"] = [];
               }
 
               // Push doc3.data() into the array
-              matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                dateSplit[2] + ""
-              ].push({ ...doc3.data(), timestamp: doc3.id });
+              matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["timestamps"].push({
+                ...doc3.data(),
+                timestamp: doc3.id,
+              });
             });
           })
           .then(() => {
-            store.dispatch("setStatsMatrix", matrix);
-            setStatMatrix({ ...(matrix as StatRecord) });
+            getDocs(qWorkflowRatings)
+              .then((qS3) => {
+                const dateSplit = doc.id.split("-");
+                qS3.docs.map((doc4) => {
+                  if (!matrix[dateSplit[0]]) {
+                    matrix[dateSplit[0] + ""] = [];
+                  }
+                  if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
+                    matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
+                  }
+                  if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]) {
+                    matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""] = [];
+                  }
+                  if (!matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]["workflowRatings"]) {
+                    matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["workflowRatings"] = [];
+                  }
+
+                  // Push doc4.data() into the array
+                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][dateSplit[2] + ""]["workflowRatings"].push({
+                    ...doc4.data(),
+                    timestamp: doc4.id,
+                  });
+                });
+              })
+              .then(() => {
+                store.dispatch("setStatsMatrix", matrix);
+                setStatMatrix({ ...(matrix as StatRecord) });
+                if (callback != null) callback(true);
+              });
           });
       });
     });
-    /*return onSnapshot(
-      collection(firestore, devicesRef + "/" + selectedDevice + "/records"),
-      (querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          onSnapshot(
-            collection(
-              firestore,
-              devicesRef +
-                "/" +
-                selectedDevice +
-                "/records/" +
-                doc.id +
-                "/timestamps"
-            ),
-            (querySnapshot) => {
-              const dateSplit = doc.id.split("-");
-              querySnapshot.docs.map((doc3) => {
-                if (!matrix[dateSplit[0]]) {
-                  matrix[dateSplit[0] + ""] = [];
-                }
-                if (!matrix[dateSplit[0]][months[dateSplit[1]]]) {
-                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]] = [];
-                }
-                if (
-                  !matrix[dateSplit[0]][months[dateSplit[1]]][dateSplit[2] + ""]
-                ) {
-                  matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                    dateSplit[2] + ""
-                  ] = [];
-                }
-
-                // Push doc3.data() into the array
-                matrix[dateSplit[0] + ""][months[dateSplit[1] + ""]][
-                  dateSplit[2] + ""
-                ].push({ ...doc3.data(), timestamp: doc3.id });
-              });
-              store.dispatch("setStatsMatrix", matrix);
-              setStatMatrix(matrix as StatRecord);
-            }
-          );
-        });
-      }
-    );*/
   };
+  if (doRefetch) {
+    fetchData(function (result: boolean) {
+      if (result) refetch();
+    });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedDevice]);
 
   useEffect(() => {
     setStatMatrix({});
@@ -141,16 +121,9 @@ const StatisticView = ({ currentUser }) => {
             ))}
         </ListInput>
       </List>
-      <div
-        className="timeline timeline-horizontal timeline-cols-2 medium-timeline-cols-3"
-        style={{ overflow: "auto" }}
-      >
+      <div className="timeline timeline-horizontal timeline-cols-1 medium-timeline-cols-3" style={{ overflow: "auto" }}>
         {Object.keys(statMatrix).map((year) => (
-          <YearTimeline
-            key={year}
-            year={year}
-            statRecObject={statMatrix[year]}
-          />
+          <YearTimeline key={year} year={year} statRecObject={statMatrix[year]} />
         ))}
       </div>
     </Block>
