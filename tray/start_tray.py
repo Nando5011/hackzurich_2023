@@ -8,9 +8,9 @@ import uuid
 from PIL import Image
 from screeninfo import get_monitors
 import sys
-
+import time
 from webview import window
-
+from queue import Queue
 
 class JsApi:
     def __init__(self, tray) -> None:
@@ -28,11 +28,16 @@ class JsApi:
 
     def close_qrcode(self):
         self.tray.close_qrcode_window()
+        
+    def close_afk(self):
+        self.tray.close_afk()
 
 
 class Tray:
-
-    def __init__(self) -> None:
+    
+    def __init__(self, q: Queue) -> None:
+        
+        self.q = q
 
         self.open_window = None
 
@@ -41,12 +46,14 @@ class Tray:
         self.qrcode_window = None
         self.meditation_window = None
         self.meditation_player = None
+        self.afk_window = None
 
         self.windows = []
 
         self.menu = (
             pystray.MenuItem('QR Code', self.open_qrcode_window),
             pystray.MenuItem('Meditation', self.open_meditation_window),
+            pystray.MenuItem('AFK', self.open_afk_window),
             pystray.MenuItem('Exit', self.on_exit),
         )
 
@@ -110,7 +117,7 @@ class Tray:
             draggable=False,
             width=250,
             height=430,
-            y=0,
+            y=self.calculate_position_of_tray_view((250, 320))[1],
             x=self.calculate_position_of_tray_view((250, 320))[0],
             js_api=self.jsapi
         )
@@ -131,7 +138,7 @@ class Tray:
             draggable=False,
             width=250,
             height=320,
-            y=0,
+            y=self.calculate_position_of_tray_view((250, 320))[1],
             x=self.calculate_position_of_tray_view((250, 320))[0],
             js_api=self.jsapi
         )
@@ -139,6 +146,30 @@ class Tray:
         self.open_window = self.meditation_window
         if self.open_window is not None and self.open_window == self.qrcode_window:
             self.qrcode_window.destroy()
+        webview.start()
+        
+    
+    def open_afk_window(self):
+        self.afk_window = webview.create_window(
+            'AFK-WINDOW',
+            os.path.join(os.getcwd(), 'tray', 'afk.html'),
+            on_top=True,
+            resizable=False,
+            frameless=True,
+            draggable=False,
+            width=350,
+            height=50,
+            y=self.calculate_position_of_tray_view((350, 50))[1],
+            x=self.calculate_position_of_tray_view((350, 50))[0],
+            js_api=self.jsapi
+        )
+
+        self.open_window = self.afk_window
+        self.afk_window.show()
+        if self.open_window is not None:
+            self.qrcode_window.destroy()
+            self.meditation_window.destroy()
+            self.meditation_player.destroy()
         webview.start()
 
     def on_exit(self, icon):
@@ -152,9 +183,33 @@ class Tray:
     def close_qrcode_window(self):
         self.open_window = None
         self.qrcode_window.hide()
+    
+    def close_afk(self):
+        self.open_window = None
+        self.afk_window.hide()
 
     def start(self) -> None:
-        self.icon.run()
+        self.icon.run_detached()
+        
+        #time.sleep(15)
+        #print("try to open ")
+        #self.open_meditation_window()
+        #webview.start()
+        
+        while True:
+            try:
+                data = self.q.get()  # Wait for up to 1 second for new data
+                # Process the data here
+                print(f"Received data: {data}")
+                
+                if data == "AFK":
+                    self.open_meditation_window()
+                elif data == "BREAK":
+                    self.open_meditation_window()
+            except Exception:
+                # Handle the case when the queue is empty
+            
+                pass
         
 if __name__ == '__main__':
     tray = Tray()

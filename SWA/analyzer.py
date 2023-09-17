@@ -3,6 +3,7 @@ import time
 import math
 from .keylogger import KeyLogger
 from .mouselogger import MouseLogger
+from queue import Queue
 
 WPM_THRESHOLD = 30
 CPM_THRESHOLD = 150
@@ -18,13 +19,14 @@ RBU_THRESHOLD = 0.1
 # IMPORTANT: The creation of the threads also needs some time (~1-2 seconds on easy cases), so do not
 # choose a refresh time of atleast 5 seconds.
 class Analyzer:
-    def __init__(self, refreshTime: int, shortTimeHistoryTimeSpan: int):
+    def __init__(self, refreshTime: int, shortTimeHistoryTimeSpan: int, q: Queue):
         self.keylogger = KeyLogger(shortTimeHistoryTimeSpan)
         self.mouselogger = MouseLogger()
         self.REFRESH_TIME = refreshTime
         self.workflowRatings = []
         self.latestKeyboardActivity = []
         self.latestMouseActivity = []
+        self.q = q
         self.__run()
 
     def __updateLatestActivity(self):
@@ -50,8 +52,10 @@ class Analyzer:
     # TODO implement these based on the statistics, these can be blocking as they are executed independently
     def __onAFKStatus(self):
         print("AFK")
+        self.q.put("AFK")
         time.sleep(10)
     def __onSuggestBreak(self):
+        self.q.put("BREAK")
         print("TO A BREAK")
     def __onEnterFocusMode(self):
         print("FOCUS MODE ON")

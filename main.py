@@ -6,23 +6,23 @@ import time
 import threading
 from SWA.analyzer import Analyzer
 import os
-import pystray
+from queue import Queue
 
 
-def analyzerTask():
+def analyzerTask(q):
     SHORTTIMEHISTORYTIME_SECONDS = 10
     REFRESH_RATE_SECONDS = 5
-    ourAnalyzer = Analyzer(REFRESH_RATE_SECONDS, SHORTTIMEHISTORYTIME_SECONDS)
+    ourAnalyzer = Analyzer(REFRESH_RATE_SECONDS, SHORTTIMEHISTORYTIME_SECONDS, q)
     
 
-def subsystem():
+def subsystem(q):
         #initialze the WindowLogger
     windowLogger = WindowLogger(datetime.timedelta(seconds=1))
     thread = threading.Thread(target=windowLogger.start)
     thread.start()
         
     #iniitalize the ANalyzer
-    analyzerThread = threading.Thread(target=analyzerTask, args=(), kwargs={})
+    analyzerThread = threading.Thread(target=analyzerTask, args=(q,), kwargs={})
     analyzerThread.start()
     
     print("Started window logger and analyzer")
@@ -48,9 +48,11 @@ if __name__ == '__main__':
 
     # Iniitlaize FirebaseClient
     fb = FirebaseClient()
-    tray = Tray()
+    q = Queue()
+    tray = Tray(q)
+    
 
-    worker_thread = threading.Thread(target=subsystem)
+    worker_thread = threading.Thread(target=subsystem, args=(q,), kwargs={})
     worker_thread.daemon = True  # Daemonize the thread so it exits when the main program does
     worker_thread.start()
     
