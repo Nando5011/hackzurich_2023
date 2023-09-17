@@ -139,9 +139,10 @@ See the [open issues](https://github.com/Nando5011/hackzurich_2023/issues) for a
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* Jerry ...
+* Ibukun Agboola 
 * Nando Imboden (@Nando5011)
 * Florian Thiévent (@0x49b)
+* Mohammad TODO
 * Leo Hofer ([leohofer.dev](https://leohofer.dev))
 
 
