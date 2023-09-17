@@ -46,7 +46,7 @@ const TimeSeriesGraph = () => {
       Object.keys(statMatrix[year][month]).forEach((day) => {
         const dayRecord = statMatrix[year][month][day];
         const taskCount = dayRecord.reduce((sum, record) => sum + 1, 0);
-        const dateString = `${day}/${month}/${year}`;
+        const dateString = `${day}/${month.slice(0,3)}/${year}`;
         const existingDayData = dataForGraph.find((data) => data.name === dateString);
 
         if (existingDayData) {

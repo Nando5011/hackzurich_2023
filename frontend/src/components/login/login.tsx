@@ -51,7 +51,17 @@ const Login = ({ closeLoginScreen }) => {
       onLoginScreenClosed={closeLoginScreen}
     >
       <Page loginScreen>
-        <LoginScreenTitle>ProLog Login</LoginScreenTitle>
+        <LoginScreenTitle>
+          <img
+            style={{
+              margin: "auto",
+              width: "40vw",
+            }}
+            src="../assets/breakwise_logo_t.png"
+          />
+          <br />
+          Login
+        </LoginScreenTitle>
         <List form>
           <ListInput
             label="E-Mail"

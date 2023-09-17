@@ -11,7 +11,7 @@ Framework7 app created with following options:
     "capacitor",
     "pwa"
   ],
-  "name": "ProLog",
+  "name": "BreakWise",
   "framework": "react",
   "template": "blank",
   "bundler": "vite",
@@ -19,7 +19,7 @@ Framework7 app created with following options:
   "theming": {
     "customColor": true,
     "color": "#ffda00",
-    "darkMode": true,
+    "darkMode": false,
     "iconFonts": true
   },
   "customBuild": false,
@@ -36,17 +36,18 @@ Framework7 app created with following options:
 ## Install Dependencies
 
 First of all we need to install dependencies, run in terminal
+
 ```
 npm install
 ```
 
 ## NPM Scripts
 
-* 🔥 `start` - run development server
-* 🔧 `dev` - run development server
-* 🔧 `build` - build web app for production
-* 📱 `build-capacitor-ios` - build app and copy it to iOS capacitor project
-* 📱 `build-capacitor-android` - build app and copy it to Android capacitor project
+- 🔥 `start` - run development server
+- 🔧 `dev` - run development server
+- 🔧 `build` - build web app for production
+- 📱 `build-capacitor-ios` - build app and copy it to iOS capacitor project
+- 📱 `build-capacitor-android` - build app and copy it to Android capacitor project
 
 ## Vite
 
@@ -55,6 +56,7 @@ There is a [Vite](https://vitejs.dev) bundler setup. It compiles and bundles all
 ## PWA
 
 This is a PWA. Don't forget to check what is inside of your `service-worker.js`. It is also recommended that you disable service worker (or enable "Update on reload") in browser dev tools during development.
+
 ## Capacitor
 
 This project created with Capacitor support. And first thing required before start is to add capacitor platforms, run in terminal:
@@ -81,7 +83,8 @@ framework7 assets --ui
 
 ## Capacitor Assets
 
-Capacitor assets are located in `resources` folder which is intended to be used with `cordova-res` tool. To generate  mobile apps assets run in terminal:
+Capacitor assets are located in `resources` folder which is intended to be used with `cordova-res` tool. To generate mobile apps assets run in terminal:
+
 ```
 npx cordova-res
 ```
@@ -90,15 +93,16 @@ Check out [official cordova-res documentation](https://github.com/ionic-team/cor
 
 ## Documentation & Resources
 
-* [Framework7 Core Documentation](https://framework7.io/docs/)
+- [Framework7 Core Documentation](https://framework7.io/docs/)
 
-* [Framework7 React Documentation](https://framework7.io/react/)
+- [Framework7 React Documentation](https://framework7.io/react/)
 
-* [Framework7 Icons Reference](https://framework7.io/icons/)
-* [Community Forum](https://forum.framework7.io)
+- [Framework7 Icons Reference](https://framework7.io/icons/)
+- [Community Forum](https://forum.framework7.io)
 
 ## Support Framework7
 
 Love Framework7? Support project by donating or pledging on:
+
 - Patreon: https://patreon.com/framework7
 - OpenCollective: https://opencollective.com/framework7

@@ -7,7 +7,7 @@ const NavbarComponent = ({ signOutUser }) => {
       <NavLeft>
         <Link onClick={signOutUser}>Sign Out</Link>
       </NavLeft>
-      <NavTitle style={{ margin: "auto" }}>ProLog</NavTitle>
+      <NavTitle style={{ margin: "auto" }}>BreakWise</NavTitle>
       <NavRight>
         <Link icon="stats" href="/stats">
           Stats
