@@ -11,17 +11,16 @@
     <body id="body">
         <h2>Let's have a Break</h2>
         <img src="user_qrcode.png" alt="user-qrcode" />
+        <button id="back">I'm back</button>
+        <button id="no">Not yet</button>
+
 
         <script>
+            const noButton = document.getElementById("no");
+            noButton.onclick = () => pywebview.api.close_qrcode();
 
-            const blurred = () => {
-                pywebview.api.window_blur()
-                console.debug("window blur")
-            }
-
-            window.addEventListener('blur', function() {
-                blurred();
-              });
+            const backButton = document.getElementById("back");
+            backButton.onclick = () => pywebview.api.close_qrcode();
         </script>
 
     </body>

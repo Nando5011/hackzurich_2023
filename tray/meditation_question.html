@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QRCODE</title>
+        <style>
+            *{font-family: 'Helvetica', 'Arial', sans-serif;}
+            h2{width: 100%; text-align: center;}
+            img{width: 50px; height: auto;}
+        </style>
+    </head>
+    <body id="body">
+        <h2>Let's have a Break</h2>
+        
+        <p>Considering doing some meditation?</p>
+        <p>Headphones recommended</p>
+        <img src="headphones.png" alt="headphones" />
+
+        <button id="yes">Yes</button>
+        <button id="no">No</button>
+
+        <script>
+              const yesButton = document.getElementById("yes");
+              yesButton.onclick = () => pywebview.api.start_meditation();
+
+              const noButton = document.getElementById("no");
+              noButton.onclick = () => pywebview.api.close_meditation();
+
+        </script>
+
+    </body>
+</html>

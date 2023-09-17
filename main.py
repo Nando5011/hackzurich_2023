@@ -21,4 +21,4 @@ if __name__ == '__main__':
         for key in timePerWindow:
             fb.send_windowlogger_data_to_firestore(key, str(timePerWindow[key]))
             
-        time.sleep(60)
+        time.sleep(10)
